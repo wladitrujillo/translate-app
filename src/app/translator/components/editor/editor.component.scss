@@ -1,3 +1,32 @@
-.col-md-3 {
-    
+.row-key {
+    border-top: 1px solid #CCCCCC;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.row-trans {
+    border-top: 1px solid #ddd;
+}
+
+.row-trans:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.key-translation-lang-name {
+    font-size: 13px;
+    padding: 10px 8px 8px 20px;
+    justify-self: start;
+    grid-area: language;
+}
+
+.key-editor-wrapper {
+    position: relative;
+    width: 100%;
+    padding: 10px 13px 10px 20px;
+    cursor: default;
+}
+
+.item-key {
+    padding-top: 10px;
+    padding-left: 7px;
 }
