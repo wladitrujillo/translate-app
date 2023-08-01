@@ -1,0 +1,25 @@
+<mat-tab-group>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">local_library</mat-icon>
+            Editor
+        </ng-template>
+        <app-editor></app-editor>
+    </mat-tab>
+
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">cloud_upload</mat-icon>
+            Cargar
+        </ng-template>
+        <app-uploader></app-uploader>
+    </mat-tab>
+
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">cloud_download</mat-icon>
+            Descargar
+        </ng-template>
+        <app-converter></app-converter>
+    </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,40 @@
+<div class="container">
+
+    <div class="row">
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Buscar</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input type="tel" matInput placeholder="">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Toppings</mat-label>
+            <mat-select multiple>
+                <mat-option *ngFor="let culture of cultures" [value]="culture">{{culture}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div class="row">
+
+        <ul style="list-style-type: none;">
+            <li class="row" *ngFor="let item of items">
+                <div class="col-md-3">{{item.id}}</div>
+                <div class="col-md-9">
+                    <ul style="list-style-type: none;">
+                        <li *ngFor="let resource of item.resources">
+                            <div>{{resource.code}}</div>
+                            <div>{{resource.value}}</div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+        </ul>
+
+
+
+    </div>
+
+</div>
