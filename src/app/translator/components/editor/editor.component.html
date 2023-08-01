@@ -1,46 +1,67 @@
 <div class="container">
 
-    <div class="row">
+    <div class="row" style="margin-top: 15px;">
 
-        <mat-form-field class="example-full-width">
-            <mat-label>Buscar</mat-label>
-            <mat-icon matPrefix>search</mat-icon>
-            <input type="tel" matInput placeholder="">
-        </mat-form-field>
+        <div class="col-md-6">
 
-        <mat-form-field>
-            <mat-label>Toppings</mat-label>
-            <mat-select multiple>
-                <mat-option *ngFor="let culture of cultures" [value]="culture">{{culture}}</mat-option>
-            </mat-select>
-        </mat-form-field>
+            <mat-form-field class="full-width">
+                <mat-label>Buscar</mat-label>
+                <mat-icon matPrefix>search</mat-icon>
+                <input #searchInput type="text" matInput placeholder="">
+            </mat-form-field>
+
+        </div>
+
+        <div class="col-md-6">
+            <button mat-button>Agregar Item</button>
+        </div>
+
     </div>
 
-    <div class="container">
+    <div class="row">
+        <div class="col-md-6">
 
-        <div class="row row-key" *ngFor="let item of items">
-            <div class="col-md-3">
-                <div class="item-key">
-                    <span>{{item.id}}</span>
-                </div>
+            <mat-form-field class="full-width">
+                <mat-label>Culturas</mat-label>
+                <mat-select multiple [formControl]="selectedLocales">
+                    <mat-option *ngFor="let locale of locales" [value]="locale">{{locale.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <button mat-button>Agregar Cultura</button>
+        </div>
+    </div>
+
+
+    <div class="row row-key" *ngFor="let resource of resources">
+        <div class="col-md-3">
+            <div class="item-key">
+                <span>{{resource.id}}</span>
             </div>
-            <div class="col-md-9">
-                <div class="row-trans" *ngFor="let resource of item.resources">
+        </div>
+        <div class="col-md-9">
+            <ng-container *ngFor="let translation of resource.translations">
+                <div class="row-trans" *ngIf="isLocaleSelected(translation.locale)">
+
                     <div class="key-translation-lang-name">
-                        <strong> {{resource.code}}</strong>
+                        <strong> {{translation.locale}}</strong>
                     </div>
                     <div class="key-translation-editor-container">
                         <div class="key-editor-wrapper">
-                            <div>{{resource.value}}</div>
+                            <div>{{translation.value}}</div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </ng-container>
         </div>
-
-
-
-
     </div>
+
+
+
+
 
 </div>

@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
 import {MatListModule} from '@angular/material/list';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [],
@@ -22,7 +23,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MatInputModule,
     MatSelectModule,
     MatListModule,
-    MatGridListModule
+    MatGridListModule,
+    MatButtonModule
   ]
 })
 export class MaterialModule { }

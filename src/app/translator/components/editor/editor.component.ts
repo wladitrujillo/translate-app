@@ -1,64 +1,107 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, filter, fromEvent, tap } from 'rxjs';
+import { Locale } from 'src/app/core/model/locale';
+import { Resource } from 'src/app/core/model/resource';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, AfterViewInit {
 
-  cultures: string[] =
-    ['Español Ecuador',
-      'Español Panama'];
+  @ViewChild('searchInput') matInput!: ElementRef;
 
-  items: any[] = [
+  locales: Locale[] =
+    [{ id: 'ES-EC', name: 'Español Ecuador' },
+    { id: 'ES-PA', name: 'Español Panamá' }];
+
+  selectedLocales: FormControl = new FormControl(this.locales);
+
+
+
+  resourcesFromService: Resource[] = [
     {
-      id: 201520,
-      description: 'La cuenta no existe',
-      resources: [
+      id: "201520",
+      translations: [
         {
-          code: 'ES-EC',
+          locale: 'ES-EC',
           value: 'La cuenta no existe'
         },
         {
-          code: 'ES-PA',
+          locale: 'ES-PA',
           value: 'La operacion no existe'
         }
       ]
     },
     {
-      id: 201521,
-      description: 'La cuenta esta bloqueada',
-      resources: [
+      id: "201521",
+      translations: [
         {
-          code: 'ES-EC',
+          locale: 'ES-EC',
           value: 'La cuenta esta bloqueada'
         },
         {
-          code: 'ES-PA',
+          locale: 'ES-PA',
           value: 'La operacion esta bloqueada'
         }
       ]
     },
     {
-      id: 201522,
-      description: 'La cuenta no tiene saldo',
-      resources: [
+      id: "201522",
+      translations: [
         {
-          code: 'ES-EC',
+          locale: 'ES-EC',
           value: 'La cuenta no tiene saldo'
         },
         {
-          code: 'ES-PA',
+          locale: 'ES-PA',
           value: 'La operacion no tiene saldo'
         }
       ]
     }
   ]
 
+  resources: Resource[] = [];
+
+
+
   constructor() { }
+
+  ngAfterViewInit(): void {
+    fromEvent(this.matInput.nativeElement, 'keyup')
+      .pipe(
+        filter(Boolean),
+        debounceTime(150),
+        distinctUntilChanged(),
+        tap((text) => {
+          console.log(this.matInput.nativeElement.value)
+        })
+      )
+      .subscribe(() => {
+        if (!this.matInput.nativeElement.value) {
+          this.resources = this.resourcesFromService;
+        }
+        this.resources = this.filterResources(this.matInput.nativeElement.value);
+      });
+  }
 
   ngOnInit(): void {
 
+    this.resources = this.resourcesFromService;
+  }
+
+  isLocaleSelected(text: string): boolean {
+    return this.selectedLocales.value.some((locale: Locale) => locale.id == text);
+  }
+
+  private filterResources(text: string) {
+    return this.resourcesFromService
+      .filter((resource) => {
+        return resource.id.includes(text) || resource.translations.some((translation) => {
+          return translation.value.includes(text);
+        });
+      });
   }
 }

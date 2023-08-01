@@ -7,6 +7,7 @@ import { ConverterComponent } from './components/converter/converter.component';
 import { SharedModule } from '../shared/shared.module';
 import { TranslatorRoutingModule } from './translator.routing.module';
 import { MaterialModule } from '../material/material.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -21,7 +22,8 @@ import { MaterialModule } from '../material/material.module';
     CommonModule,
     MaterialModule,
     SharedModule,
-    TranslatorRoutingModule
+    TranslatorRoutingModule,
+    ReactiveFormsModule
   ],
   exports: [
     HomeComponent,

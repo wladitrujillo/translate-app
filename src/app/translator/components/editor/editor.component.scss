@@ -4,8 +4,8 @@
     margin-left: 0;
 }
 
-.row-trans {
-    border-top: 1px solid #ddd;
+.row-trans:not(:last-child) {
+    border-bottom: 1px solid #ddd;
 }
 
 .row-trans:nth-child(odd) {
@@ -29,4 +29,8 @@
 .item-key {
     padding-top: 10px;
     padding-left: 7px;
+}
+
+.full-width {
+    width: 100%;
 }
