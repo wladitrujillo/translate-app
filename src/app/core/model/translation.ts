@@ -1,4 +1,4 @@
-export class Translation {
-    locale!: string;
-    value!: string;
+export interface Translation {
+    locale: string;
+    value: string;
 }

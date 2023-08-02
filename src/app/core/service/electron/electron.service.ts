@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resource } from '../../model/resource';
 import { Locale } from '../../model/locale';
 import { Translation } from '../../model/translation';
+import { Project } from '../../model/project';
 
 let resources: Resource[] = [
   {
@@ -48,10 +49,15 @@ let resources: Resource[] = [
   }
 ];
 
-let locales = [
-  { id: 'ES-EC', name: 'Español Ecuador' },
-  { id: 'ES-PA', name: 'Español Panamá' }
-]
+let project: Project = {
+  name: 'Project 1',
+  baseLocale: { id: 'ES-EC', name: 'Español Ecuador' },
+  locales: [
+    { id: 'ES-EC', name: 'Español Ecuador' },
+    { id: 'ES-PA', name: 'Español Panamá' }
+  ]
+}
+
 
 let allLocales = [
   { id: 'ES-EC', name: 'Español Ecuador' },
@@ -77,6 +83,17 @@ export class ElectronService {
   }
 
   addResource(resource: Resource): void {
+    let found = resources.some((r: Resource) => r.id == resource.id);
+    if (found) {
+      throw new Error('Resource already exists');
+    }
+    resource.translations = [];
+    project.locales.forEach((locale: Locale) => {
+      resource.translations.push({
+        locale: locale.id,
+        value: resource.value
+      });
+    });
     resources.push(resource); // add resource to the end of the array
   }
 
@@ -100,19 +117,31 @@ export class ElectronService {
   }
 
   addLocale(locale: Locale): void {
-    locales.push(locale);
+    project.locales
+      .push(locale);
     resources.forEach((resource: Resource) => {
       resource.translations.push({ locale: locale.id, value: '' });
     });
   }
 
   getLocales(): Locale[] {
-    return locales;
+    return project.locales;
   }
 
   getAllLocales(): Locale[] {
     return allLocales;
   }
 
+  getBaseLocale(): Locale {
+    return project.baseLocale;
+  }
+
+  getProject(): Project {
+    return project;
+  }
+
+  updateProject(project: Project): void {
+    project = project;
+  }
 
 }

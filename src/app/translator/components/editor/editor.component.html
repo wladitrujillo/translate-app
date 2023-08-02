@@ -5,7 +5,7 @@
 
             <mat-form-field class="full-width">
                 <mat-label>Culturas</mat-label>
-                <mat-select multiple [formControl]="selectedLocales">
+                <mat-select [compareWith]="compareCulture" multiple [formControl]="selectedLocales">
                     <mat-select-trigger fxLayout="row wrap">
                         <span *ngFor="let locale of selectedLocales.value; let last = last"
                             class="example-additional-selection">
@@ -17,7 +17,7 @@
                         </ng-container>
                     </mat-option>
                     <ng-template #customTemplate let-locale="locale">
-                       {{locale.id}} {{locale.name}}
+                        {{locale.id}} {{locale.name}}
                     </ng-template>
                     <mat-divider></mat-divider>
                     <button mat-button class="full-width" (click)="openDialogAddCulture($event)" id="addCulture">Agregar
@@ -89,14 +89,15 @@
                         <ng-template #translationEditor>
                             <div class="key-translation-editor">
                                 <div class="editor-wrapper">
-                                    <input class="form-control" matInput placeholder="Traducción"
-                                        value="{{translation.value}}">
+                                    <input #translationInput type="text" class="form-control" matInput
+                                        placeholder="Traducción" value="{{translation.value}}">
                                     <div class="editor-panel bottom-panel">
-                                        <button mat-raised-button color="primary">Guardar</button>
+                                        <button mat-raised-button color="primary"
+                                            (click)="onSubmitTranslation(resource, translation, translationInput.value)">Guardar</button>
                                         <button mat-raised-button (click)="selectedTranslation=null">Cancelar</button>
                                         <div class="editor-function-toggle-container">
                                             <div class="character-counter">
-                                                <span>18</span>
+                                                <span>{{translationInput.value.length}}</span>
                                             </div>
                                         </div>
                                     </div>

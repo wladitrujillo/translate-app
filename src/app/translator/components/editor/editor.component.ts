@@ -9,6 +9,7 @@ import { DialogAddCultureComponent } from '../dialog-add-culture/dialog-add-cult
 import { DialogAddResourceComponent } from '../dialog-add-resource/dialog-add-resource.component';
 import { DialogConfirmRemoveComponent } from 'src/app/shared/components/dialog-confirm-remove/dialog-confirm-remove.component';
 import { ElectronService } from 'src/app/core/service/electron/electron.service';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-editor',
@@ -22,15 +23,16 @@ export class EditorComponent implements OnInit, AfterViewInit {
   //from service
   resources: Resource[] = [];
   locales: Locale[] = [];
-
+  baseLocale: Locale = { id: '', name: '' };
 
   //template variables
-  selectedLocales: FormControl = new FormControl(this.locales);
+  selectedLocales: FormControl = new FormControl([]);
   selectedTranslation: Translation | null = null;
   resourcesView: Resource[] = [];
 
 
-  constructor(private dialog: MatDialog, private service: ElectronService) { }
+  constructor(private dialog: MatDialog,
+    private service: ElectronService) { }
 
   ngAfterViewInit(): void {
     fromEvent(this.matInput.nativeElement, 'keyup')
@@ -43,23 +45,25 @@ export class EditorComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe(() => {
-        this.resourcesView = this.filterResources(this.matInput.nativeElement.value);
+        this.resourcesView =
+          this.filterResources(this.matInput.nativeElement.value);
       });
   }
 
   ngOnInit(): void {
 
     this.loadData();
-
+    this.selectedLocales.setValue([this.baseLocale]);
     this.resourcesView = this.resources;
 
   }
 
-  isLocaleSelected(text: string): boolean {
+  isLocaleSelected(localeId: string): boolean {
     if (!Array.isArray(this.selectedLocales.value)) {
-      return this.selectedLocales.value.id == text;
+      return this.selectedLocales.value.id == localeId;
     }
-    return this.selectedLocales.value.some((locale: Locale) => locale.id == text);
+    return this.selectedLocales.value
+      .some((locale: Locale) => locale.id == localeId);
   }
 
   openEditor(translation: Translation): void {
@@ -81,9 +85,11 @@ export class EditorComponent implements OnInit, AfterViewInit {
     dialogConfig.data = { locales: this.locales };
     dialogConfig.width = '50%';
 
-    const dialogRef = this.dialog.open(DialogAddCultureComponent, dialogConfig);
+    const dialogRef = this.dialog
+      .open(DialogAddCultureComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe(result => { console.log(result) });
+    dialogRef.afterClosed()
+      .subscribe(result => { console.log(result) });
 
   }
 
@@ -93,9 +99,11 @@ export class EditorComponent implements OnInit, AfterViewInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
 
-    const dialogRef = this.dialog.open(DialogAddResourceComponent, dialogConfig);
+    const dialogRef = this.dialog
+      .open(DialogAddResourceComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe(result => { console.log(result) });
+    dialogRef.afterClosed()
+      .subscribe(result => { console.log(result) });
   }
 
   onDeleteResource(resource: Resource): void {
@@ -105,7 +113,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
     dialogConfig.autoFocus = true;
     dialogConfig.data = {
       title: "Recurso",
-      message: `¿Está seguro que desea eliminar el recurso ${resource.id}?`
+      message: `¿Está seguro que desea eliminar 
+      el recurso ${resource.id}?`
     };
 
     const dialogRef = this.dialog
@@ -122,9 +131,24 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   }
 
+  onSubmitTranslation(
+    resource: Resource,
+    translation: Translation,
+    inputValue: string): void {
+    translation.value = inputValue;
+    this.service.updateTranslation(resource.id, translation);
+    this.selectedTranslation = null;
+  }
+
+  compareCulture(locale1: Locale, locale2: Locale): boolean {
+    return locale1 && locale2 ?
+      locale1.id === locale2.id : locale1 === locale2;
+  }
+
   private loadData(): void {
     this.locales = this.service.getLocales();
     this.resources = this.service.getResources();
+    this.baseLocale = this.service.getBaseLocale();
   }
 
   private filterResources(text: string) {
@@ -133,9 +157,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
     }
     return this.resources
       .filter((resource) => {
-        return resource.id.includes(text) || resource.translations.some((translation) => {
-          return translation.value.includes(text);
-        });
+        return resource.id.includes(text) ||
+          resource.translations.some((translation) => {
+            return translation.value.includes(text);
+          });
       });
   }
 }

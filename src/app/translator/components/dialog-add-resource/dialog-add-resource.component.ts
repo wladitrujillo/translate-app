@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ElectronService } from 'src/app/core/service/electron/electron.service';
 
 @Component({
   selector: 'app-dialog-add-resource',
@@ -14,7 +15,8 @@ export class DialogAddResourceComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<DialogAddResourceComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any,
-    private formBuilder: FormBuilder) { }
+    private formBuilder: FormBuilder,
+    private service: ElectronService) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -24,7 +26,14 @@ export class DialogAddResourceComponent implements OnInit {
   }
 
   onSubmit() {
-    this.dialogRef.close();
+    if (this.form.invalid) return;
+    try {
+      this.service.addResource(this.form.value);
+      this.dialogRef.close(true);
+    } catch (e) {
+      console.error(e);
+      alert(e);
+    }
   }
 
   /* Get errors */
