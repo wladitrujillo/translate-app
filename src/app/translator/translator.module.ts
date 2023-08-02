@@ -9,6 +9,7 @@ import { TranslatorRoutingModule } from './translator.routing.module';
 import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogAddCultureComponent } from './components/dialog-add-culture/dialog-add-culture.component';
+import { DialogAddResourceComponent } from './components/dialog-add-resource/dialog-add-resource.component';
 
 
 
@@ -18,7 +19,8 @@ import { DialogAddCultureComponent } from './components/dialog-add-culture/dialo
     EditorComponent,
     UploaderComponent,
     ConverterComponent,
-    DialogAddCultureComponent
+    DialogAddCultureComponent,
+    DialogAddResourceComponent
   ],
   imports: [
     CommonModule,
