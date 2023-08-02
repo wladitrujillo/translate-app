@@ -10,6 +10,8 @@ import {MatListModule} from '@angular/material/list';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [],
@@ -26,7 +28,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatListModule,
     MatGridListModule,
     MatButtonModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatCheckboxModule,
+    MatDialogModule
   ]
 })
 export class MaterialModule { }

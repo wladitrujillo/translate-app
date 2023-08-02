@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>
+  Agregar Cultura
+</h1>
+<div mat-dialog-content>
+  <mat-form-field style="width: 100%;">
+    <mat-label>Seleccione</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let locale of locales" [value]="locale.id">
+        {{locale.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onSave()">Guardar</button>
+  <button mat-raised-button [mat-dialog-close]="'test'">Cancelar</button>
+</div>

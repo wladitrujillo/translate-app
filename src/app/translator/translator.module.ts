@@ -8,6 +8,7 @@ import { SharedModule } from '../shared/shared.module';
 import { TranslatorRoutingModule } from './translator.routing.module';
 import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DialogAddCultureComponent } from './components/dialog-add-culture/dialog-add-culture.component';
 
 
 
@@ -16,7 +17,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     HomeComponent,
     EditorComponent,
     UploaderComponent,
-    ConverterComponent
+    ConverterComponent,
+    DialogAddCultureComponent
   ],
   imports: [
     CommonModule,

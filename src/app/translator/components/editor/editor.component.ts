@@ -4,6 +4,8 @@ import { debounceTime, distinctUntilChanged, filter, fromEvent, tap } from 'rxjs
 import { Locale } from 'src/app/core/model/locale';
 import { Resource } from 'src/app/core/model/resource';
 import { Translation } from 'src/app/core/model/translation';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogAddCultureComponent } from '../dialog-add-culture/dialog-add-culture.component';
 
 @Component({
   selector: 'app-editor',
@@ -68,7 +70,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
 
 
-  constructor() { }
+  constructor(private dialog: MatDialog) { }
 
   ngAfterViewInit(): void {
     fromEvent(this.matInput.nativeElement, 'keyup')
@@ -101,6 +103,22 @@ export class EditorComponent implements OnInit, AfterViewInit {
   clearSearch(): void {
     this.matInput.nativeElement.value = '';
     this.resources = this.resourcesFromService;
+  }
+
+  openAddCulture($event: Event): void {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = { locales: this.locales };
+    dialogConfig.width = '50%';
+
+    const dialogRef = this.dialog.open(DialogAddCultureComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => { console.log(result) });
+
   }
 
   private filterResources(text: string) {

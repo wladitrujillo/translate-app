@@ -1,6 +1,25 @@
 <div class="container">
 
-    <div class="row" style="margin-top: 15px;">
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-md-6">
+
+            <mat-form-field class="full-width">
+                <mat-label>Culturas</mat-label>
+                <mat-select multiple [formControl]="selectedLocales">
+                    <mat-option *ngFor="let locale of locales; let last = last"
+                        [value]="locale">{{locale.name}}</mat-option>
+                    <mat-divider></mat-divider>
+                    <button mat-button class="full-width" (click)="openAddCulture($event)" id="addCulture">Agregar
+                        Cultura</button>
+                </mat-select>
+            </mat-form-field>
+
+        </div>
+
+        <div class="col-md-6">
+        </div>
+    </div>
+    <div class="row">
 
         <div class="col-md-6">
 
@@ -14,30 +33,18 @@
         </div>
 
         <div class="col-md-6">
-            <button mat-button>Agregar Item</button>
+            <button mat-raised-button color="primary">Agregar Item</button>
         </div>
 
     </div>
 
-    <div class="row">
-        <div class="col-md-6">
 
-            <mat-form-field class="full-width">
-                <mat-label>Culturas</mat-label>
-                <mat-select multiple [formControl]="selectedLocales">
-                    <mat-option *ngFor="let locale of locales" [value]="locale">{{locale.name}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-
-        </div>
-
-        <div class="col-md-6">
-
-            <button mat-button>Agregar Cultura</button>
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-md-12">
+            <strong>Items</strong>
+            {{resources.length}}
         </div>
     </div>
-
-
     <div class="row row-key" *ngFor="let resource of resources">
         <div class="col-md-3">
             <div class="item-key">
