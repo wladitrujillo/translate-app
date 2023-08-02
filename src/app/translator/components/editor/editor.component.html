@@ -6,10 +6,18 @@
             <mat-form-field class="full-width">
                 <mat-label>Culturas</mat-label>
                 <mat-select multiple [formControl]="selectedLocales">
-                    <mat-option *ngFor="let locale of locales; let last = last"
-                        [value]="locale">{{locale.name}}</mat-option>
+                    <mat-select-trigger fxLayout="row wrap">
+                        <span *ngFor="let locale of selectedLocales.value; let last = last" class="example-additional-selection">
+                            {{locale.name}} {{last ? '' : ', '}}
+                        </span>
+                    </mat-select-trigger>
+                    <mat-option *ngFor="let locale of locales" [value]="locale">
+                        <ng-container>
+                            {{locale.name}}
+                        </ng-container>
+                    </mat-option>
                     <mat-divider></mat-divider>
-                    <button mat-button class="full-width" (click)="openAddCulture($event)" id="addCulture">Agregar
+                    <button mat-button class="full-width" (click)="openDialogAddCulture($event)" id="addCulture">Agregar
                         Cultura</button>
                 </mat-select>
             </mat-form-field>
@@ -33,7 +41,7 @@
         </div>
 
         <div class="col-md-6">
-            <button mat-raised-button color="primary">Agregar Item</button>
+            <button mat-raised-button color="primary" (click)="openDialogAddResource()">Agregar Recurso</button>
         </div>
 
     </div>
@@ -48,7 +56,15 @@
     <div class="row row-key" *ngFor="let resource of resources">
         <div class="col-md-3">
             <div class="item-key">
-                <span>{{resource.id}}</span>
+                <div class="item-key-value">
+                    <span>{{resource.id}}</span>
+                </div>
+                <div class="item-key-actions">
+                    <button (click)="onDeleteResource(resource)" class="icon-button-small" mat-mini-fab
+                        matTooltip="Borrar recurso" aria-label="Delete Resource">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
             </div>
         </div>
         <div class="col-md-9" style="padding-right: 0;">
@@ -73,6 +89,11 @@
                                     <div class="editor-panel bottom-panel">
                                         <button mat-raised-button color="primary">Guardar</button>
                                         <button mat-raised-button (click)="selectedTranslation=null">Cancelar</button>
+                                        <div class="editor-function-toggle-container">
+                                            <div class="character-counter">
+                                                <span>18</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

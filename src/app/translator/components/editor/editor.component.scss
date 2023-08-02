@@ -66,13 +66,14 @@
 }
 
 $small-size-button: 24px;
-$small-size-icon: 18px;
+$small-size-icon: 17px;
 
 button[mat-mini-fab] {
     &.icon-button-small {
         width: $small-size-button;
         height: $small-size-button;
         line-height: $small-size-button;
+        opacity: 0.5;
 
         .mat-icon {
             font-size: $small-size-icon;
@@ -99,4 +100,48 @@ button#addCulture {
     justify-content: flex-start;
     padding-left: 50px;
     top: 5px;
+}
+
+.item-key {
+    display: grid;
+    grid-template-areas:
+        "key actions";
+    grid-template-rows: auto 1fr;
+}
+
+.item-key-value {
+    font-size: 13px;
+    padding: 10px 8px 8px 20px;
+    justify-self: start;
+    grid-area: key;
+}
+
+.item-key-actions {
+    font-size: 13px;
+    padding: 10px 8px 8px 20px;
+    justify-self: end;
+    grid-area: actions;
+}
+
+.editor-function-toggle-container {
+    float: right;
+    margin-top: 10px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-right: 15px;
+}
+
+.character-counter {
+    border-style: solid;
+    border-width: thin;
+    border-radius: 40%;
+    width: auto;
+    min-width: 30px;
+    text-align: center;
+}
+
+.mat-mdc-option .mdc-list-item__primary-text {
+    width: 100%;
 }

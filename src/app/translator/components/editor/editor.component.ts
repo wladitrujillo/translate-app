@@ -6,6 +6,8 @@ import { Resource } from 'src/app/core/model/resource';
 import { Translation } from 'src/app/core/model/translation';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogAddCultureComponent } from '../dialog-add-culture/dialog-add-culture.component';
+import { DialogAddResourceComponent } from '../dialog-add-resource/dialog-add-resource.component';
+import { DialogRemoveComponent } from 'src/app/shared/components/dialog-remove/dialog-remove.component';
 
 @Component({
   selector: 'app-editor',
@@ -27,6 +29,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   resourcesFromService: Resource[] = [
     {
       id: "201520",
+      value: "La cuenta no existe",
       translations: [
         {
           locale: 'ES-EC',
@@ -40,6 +43,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     },
     {
       id: "201521",
+      value: "La cuenta esta bloqueada",
       translations: [
         {
           locale: 'ES-EC',
@@ -53,6 +57,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     },
     {
       id: "201522",
+      value: "La cuenta no tiene saldo",
       translations: [
         {
           locale: 'ES-EC',
@@ -105,7 +110,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.resources = this.resourcesFromService;
   }
 
-  openAddCulture($event: Event): void {
+  openDialogAddCulture($event: Event): void {
     $event.preventDefault();
     $event.stopPropagation();
 
@@ -118,6 +123,39 @@ export class EditorComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(DialogAddCultureComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => { console.log(result) });
+
+  }
+
+  openDialogAddResource(): void {
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    const dialogRef = this.dialog.open(DialogAddResourceComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => { console.log(result) });
+  }
+
+  onDeleteResource(resource: Resource): void {
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      title: "Recurso",
+      message: `¿Está seguro que desea eliminar el recurso ${resource.id}?`
+    };
+
+    const dialogRef = this.dialog
+      .open(DialogRemoveComponent, dialogConfig);
+
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          console.log("Borrando recurso...");
+        }
+       });
 
   }
 
