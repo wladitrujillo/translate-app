@@ -7,7 +7,7 @@ import { Translation } from 'src/app/core/model/translation';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogAddCultureComponent } from '../dialog-add-culture/dialog-add-culture.component';
 import { DialogAddResourceComponent } from '../dialog-add-resource/dialog-add-resource.component';
-import { DialogRemoveComponent } from 'src/app/shared/components/dialog-remove/dialog-remove.component';
+import { DialogConfirmRemoveComponent } from 'src/app/shared/components/dialog-confirm-remove/dialog-confirm-remove.component';
 import { ElectronService } from 'src/app/core/service/electron/electron.service';
 
 @Component({
@@ -109,7 +109,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     };
 
     const dialogRef = this.dialog
-      .open(DialogRemoveComponent, dialogConfig);
+      .open(DialogConfirmRemoveComponent, dialogConfig);
 
     dialogRef
       .afterClosed()

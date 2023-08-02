@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DialogRemoveComponent } from './dialog-remove.component';
+import { DialogConfirmRemoveComponent } from './dialog-confirm-remove.component';
 
 describe('DialogRemoveComponent', () => {
-  let component: DialogRemoveComponent;
-  let fixture: ComponentFixture<DialogRemoveComponent>;
+  let component: DialogConfirmRemoveComponent;
+  let fixture: ComponentFixture<DialogConfirmRemoveComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [DialogRemoveComponent]
+      declarations: [DialogConfirmRemoveComponent]
     });
-    fixture = TestBed.createComponent(DialogRemoveComponent);
+    fixture = TestBed.createComponent(DialogConfirmRemoveComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

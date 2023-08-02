@@ -4,17 +4,17 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog-remove',
-  templateUrl: './dialog-remove.component.html',
-  styleUrls: ['./dialog-remove.component.scss']
+  templateUrl: './dialog-confirm-remove.component.html',
+  styleUrls: ['./dialog-confirm-remove.component.scss']
 })
-export class DialogRemoveComponent implements OnInit {
+export class DialogConfirmRemoveComponent implements OnInit {
 
   textValidation: string = 'Borrar';
 
   text: FormControl = new FormControl();
 
   constructor(
-    private dialogRef: MatDialogRef<DialogRemoveComponent>,
+    private dialogRef: MatDialogRef<DialogConfirmRemoveComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {

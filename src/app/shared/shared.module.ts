@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { DialogRemoveComponent } from './components/dialog-remove/dialog-remove.component';
+import { DialogConfirmRemoveComponent } from './components/dialog-confirm-remove/dialog-confirm-remove.component';
 import { MaterialModule } from '../material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -10,7 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     PageNotFoundComponent,
-    DialogRemoveComponent,
+    DialogConfirmRemoveComponent,
   ],
   imports: [
     CommonModule,
@@ -20,7 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   ],
   exports: [
     PageNotFoundComponent,
-    DialogRemoveComponent
+    DialogConfirmRemoveComponent
   ]
 })
 export class SharedModule { }
