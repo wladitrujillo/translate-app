@@ -98,6 +98,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   isLocaleSelected(text: string): boolean {
+    if (!Array.isArray(this.selectedLocales.value)) {
+      return this.selectedLocales.value.id == text;
+    }
     return this.selectedLocales.value.some((locale: Locale) => locale.id == text);
   }
 
@@ -155,7 +158,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
         if (result) {
           console.log("Borrando recurso...");
         }
-       });
+      });
 
   }
 
