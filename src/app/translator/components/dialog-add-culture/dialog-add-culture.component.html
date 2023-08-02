@@ -4,8 +4,8 @@
 <div mat-dialog-content>
   <mat-form-field style="width: 100%;">
     <mat-label>Seleccione</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let locale of locales" [value]="locale.id">
+    <mat-select [formControl]="selectedLocale">
+      <mat-option *ngFor="let locale of availableLocales" [value]="locale">
         {{locale.name}}
       </mat-option>
     </mat-select>
@@ -13,6 +13,6 @@
 
 </div>
 <div mat-dialog-actions>
-  <button mat-raised-button color="primary" (click)="onSave()">Guardar</button>
+  <button mat-raised-button color="primary" (click)="onSave(selectedLocale.value)">Guardar</button>
   <button mat-raised-button [mat-dialog-close]="'test'">Cancelar</button>
 </div>

@@ -19,16 +19,15 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   @ViewChild('searchInput') matInput!: ElementRef;
 
-  locales: Locale[] =
-    [{ id: 'ES-EC', name: 'Español Ecuador' },
-    { id: 'ES-PA', name: 'Español Panamá' }];
+  //from service
+  resources: Resource[] = [];
+  locales: Locale[] = [];
 
+
+  //template variables
   selectedLocales: FormControl = new FormControl(this.locales);
   selectedTranslation: Translation | null = null;
-
-
   resourcesView: Resource[] = [];
-  resources: Resource[] = [];
 
 
   constructor(private dialog: MatDialog, private service: ElectronService) { }
@@ -50,8 +49,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
-    this.resources = this.service.getResources();
+    this.loadData();
+
     this.resourcesView = this.resources;
+
   }
 
   isLocaleSelected(text: string): boolean {
@@ -110,13 +111,20 @@ export class EditorComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog
       .open(DialogRemoveComponent, dialogConfig);
 
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result) {
+    dialogRef
+      .afterClosed()
+      .subscribe(acceptedDelete => {
+        if (acceptedDelete) {
           console.log("Borrando recurso...");
+          this.service.deleteResource(resource.id);
         }
       });
 
+  }
+
+  private loadData(): void {
+    this.locales = this.service.getLocales();
+    this.resources = this.service.getResources();
   }
 
   private filterResources(text: string) {

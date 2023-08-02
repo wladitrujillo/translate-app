@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resource } from '../../model/resource';
+import { Locale } from '../../model/locale';
+import { Translation } from '../../model/translation';
 
 let resources: Resource[] = [
   {
@@ -44,6 +46,22 @@ let resources: Resource[] = [
       }
     ]
   }
+];
+
+let locales = [
+  { id: 'ES-EC', name: 'Español Ecuador' },
+  { id: 'ES-PA', name: 'Español Panamá' }
+]
+
+let allLocales = [
+  { id: 'ES-EC', name: 'Español Ecuador' },
+  { id: 'ES-PA', name: 'Español Panamá' },
+  { id: 'EN-US', name: 'English US' },
+  { id: 'EN-GB', name: 'English UK' },
+  { id: 'FR-FR', name: 'French France' },
+  { id: 'FR-CA', name: 'French Canada' },
+  { id: 'DE-DE', name: 'German Germany' },
+  { id: 'ES-CO', name: 'Español Colombia' },
 ]
 
 @Injectable({
@@ -56,6 +74,44 @@ export class ElectronService {
 
   getResources(): Resource[] {
     return resources;
+  }
+
+  addResource(resource: Resource): void {
+    resources.push(resource); // add resource to the end of the array
+  }
+
+  updateResource(resource: Resource): void {
+    let index = resources.findIndex((r: Resource) => r.id == resource.id);
+    resources[index] = resource; // replace resource at index
+  }
+
+  deleteResource(resourceId: string): void {
+    let index = resources.findIndex((r: Resource) => r.id == resourceId);
+    resources.splice(index, 1); // remove 1 element from index
+  }
+
+  updateTranslation(
+    resourceId: string,
+    translation: Translation): void {
+    let resource = resources.find((r: Resource) => r.id == resourceId);
+    if (!resource) return;
+    let index = resource.translations.findIndex((t: any) => t.locale == translation.locale);
+    resource.translations[index] = translation;
+  }
+
+  addLocale(locale: Locale): void {
+    locales.push(locale);
+    resources.forEach((resource: Resource) => {
+      resource.translations.push({ locale: locale.id, value: '' });
+    });
+  }
+
+  getLocales(): Locale[] {
+    return locales;
+  }
+
+  getAllLocales(): Locale[] {
+    return allLocales;
   }
 
 
