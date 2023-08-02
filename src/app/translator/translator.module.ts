@@ -10,6 +10,8 @@ import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogAddCultureComponent } from './components/dialog-add-culture/dialog-add-culture.component';
 import { DialogAddResourceComponent } from './components/dialog-add-resource/dialog-add-resource.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { CoreModule } from '../core/core.module';
 
 
 
@@ -20,20 +22,18 @@ import { DialogAddResourceComponent } from './components/dialog-add-resource/dia
     UploaderComponent,
     ConverterComponent,
     DialogAddCultureComponent,
-    DialogAddResourceComponent
+    DialogAddResourceComponent,
+    SettingsComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
+    CoreModule,
     SharedModule,
     TranslatorRoutingModule,
     ReactiveFormsModule
   ],
   exports: [
-    HomeComponent,
-    EditorComponent,
-    UploaderComponent,
-    ConverterComponent
   ]
 })
 export class TranslatorModule { }

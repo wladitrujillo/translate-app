@@ -8,6 +8,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogAddCultureComponent } from '../dialog-add-culture/dialog-add-culture.component';
 import { DialogAddResourceComponent } from '../dialog-add-resource/dialog-add-resource.component';
 import { DialogRemoveComponent } from 'src/app/shared/components/dialog-remove/dialog-remove.component';
+import { ElectronService } from 'src/app/core/service/electron/electron.service';
 
 @Component({
   selector: 'app-editor',
@@ -26,56 +27,11 @@ export class EditorComponent implements OnInit, AfterViewInit {
   selectedTranslation: Translation | null = null;
 
 
-  resourcesFromService: Resource[] = [
-    {
-      id: "201520",
-      value: "La cuenta no existe",
-      translations: [
-        {
-          locale: 'ES-EC',
-          value: 'La cuenta no existe'
-        },
-        {
-          locale: 'ES-PA',
-          value: 'La operacion no existe'
-        }
-      ]
-    },
-    {
-      id: "201521",
-      value: "La cuenta esta bloqueada",
-      translations: [
-        {
-          locale: 'ES-EC',
-          value: 'La cuenta esta bloqueada'
-        },
-        {
-          locale: 'ES-PA',
-          value: 'La operacion esta bloqueada'
-        }
-      ]
-    },
-    {
-      id: "201522",
-      value: "La cuenta no tiene saldo",
-      translations: [
-        {
-          locale: 'ES-EC',
-          value: 'La cuenta no tiene saldo'
-        },
-        {
-          locale: 'ES-PA',
-          value: 'La operacion no tiene saldo'
-        }
-      ]
-    }
-  ]
-
+  resourcesView: Resource[] = [];
   resources: Resource[] = [];
 
 
-
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private service: ElectronService) { }
 
   ngAfterViewInit(): void {
     fromEvent(this.matInput.nativeElement, 'keyup')
@@ -88,13 +44,14 @@ export class EditorComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe(() => {
-        this.resources = this.filterResources(this.matInput.nativeElement.value);
+        this.resourcesView = this.filterResources(this.matInput.nativeElement.value);
       });
   }
 
   ngOnInit(): void {
 
-    this.resources = this.resourcesFromService;
+    this.resources = this.service.getResources();
+    this.resourcesView = this.resources;
   }
 
   isLocaleSelected(text: string): boolean {
@@ -110,7 +67,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   clearSearch(): void {
     this.matInput.nativeElement.value = '';
-    this.resources = this.resourcesFromService;
+    this.resourcesView = this.filterResources('');
   }
 
   openDialogAddCulture($event: Event): void {
@@ -164,9 +121,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   private filterResources(text: string) {
     if (!text) {
-      return this.resourcesFromService;
+      return this.resources;
     }
-    return this.resourcesFromService
+    return this.resources
       .filter((resource) => {
         return resource.id.includes(text) || resource.translations.some((translation) => {
           return translation.value.includes(text);
