@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, fromEvent, tap } from 'rxjs';
 import { Locale } from 'src/app/core/model/locale';
 import { Resource } from 'src/app/core/model/resource';
+import { Translation } from 'src/app/core/model/translation';
 
 @Component({
   selector: 'app-editor',
@@ -18,7 +19,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     { id: 'ES-PA', name: 'Español Panamá' }];
 
   selectedLocales: FormControl = new FormControl(this.locales);
-
+  selectedTranslation: Translation | null = null;
 
 
   resourcesFromService: Resource[] = [
@@ -80,9 +81,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe(() => {
-        if (!this.matInput.nativeElement.value) {
-          this.resources = this.resourcesFromService;
-        }
         this.resources = this.filterResources(this.matInput.nativeElement.value);
       });
   }
@@ -96,7 +94,19 @@ export class EditorComponent implements OnInit, AfterViewInit {
     return this.selectedLocales.value.some((locale: Locale) => locale.id == text);
   }
 
+  openEditor(translation: Translation): void {
+    console.log(translation);
+  }
+
+  clearSearch(): void {
+    this.matInput.nativeElement.value = '';
+    this.resources = this.resourcesFromService;
+  }
+
   private filterResources(text: string) {
+    if (!text) {
+      return this.resourcesFromService;
+    }
     return this.resourcesFromService
       .filter((resource) => {
         return resource.id.includes(text) || resource.translations.some((translation) => {

@@ -8,6 +8,7 @@
                 <mat-label>Buscar</mat-label>
                 <mat-icon matPrefix>search</mat-icon>
                 <input #searchInput type="text" matInput placeholder="">
+                <mat-icon (click)="clearSearch()" matSuffix *ngIf="searchInput.value">close</mat-icon>
             </mat-form-field>
 
         </div>
@@ -43,7 +44,7 @@
                 <span>{{resource.id}}</span>
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-9" style="padding-right: 0;">
             <ng-container *ngFor="let translation of resource.translations">
                 <div class="row-trans" *ngIf="isLocaleSelected(translation.locale)">
 
@@ -51,10 +52,36 @@
                         <strong> {{translation.locale}}</strong>
                     </div>
                     <div class="key-translation-editor-container">
-                        <div class="key-editor-wrapper">
-                            <div>{{translation.value}}</div>
-                        </div>
+                        <ng-template [ngIf]="selectedTranslation!=translation" [ngIfElse]="translationEditor">
+                            <div (click)="selectedTranslation=translation" class="key-editor-wrapper">
+                                <div>{{translation.value}}</div>
+                            </div>
+                        </ng-template>
+
+                        <ng-template #translationEditor>
+                            <div class="key-translation-editor">
+                                <div class="editor-wrapper">
+                                    <input class="form-control" matInput placeholder="Traducción"
+                                        value="{{translation.value}}">
+                                    <div class="editor-panel bottom-panel">
+                                        <button mat-raised-button color="primary">Guardar</button>
+                                        <button mat-raised-button (click)="selectedTranslation=null">Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
                     </div>
+                    <div class="key-translation-actions-container">
+
+                        <div class="key-translation-actions">
+                            <!--button class="icon-button-small" mat-mini-fab
+                                aria-label="Example icon button with a home icon">
+                                <mat-icon>mode_edit</mat-icon>
+                            </button-->
+                        </div>
+
+                    </div>
+
                 </div>
             </ng-container>
         </div>
