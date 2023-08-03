@@ -5,7 +5,11 @@ import { Injectable } from '@angular/core';
 import { ipcRenderer, webFrame } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
+import { Resource } from '../../model/resource';
+import { Project } from '../../model/project';
 
+const RESOURCES: string = "resources.json";
+const PROJECT: string = "project.json";
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +20,12 @@ export class ElectronService {
   childProcess!: typeof childProcess;
   fs!: typeof fs;
 
+  projectPath: string = "";
+
+
   constructor() {
+
+    this.projectPath = "C:\\Users\\wladi\\Documents\\electron-files";
 
     // Conditional imports
     if (this.isElectron) {
@@ -52,6 +61,65 @@ export class ElectronService {
 
 
   }
+
+  /*saveResourceToDisk = (url: string, filePath: string) => {
+    return new Promise((resolve, reject) => {
+      this.ipcRenderer.invoke('saveResourceToDisk', url, filePath).then((result: any) => {
+        resolve(result);
+      }).catch((error: any) => {
+        reject(error);
+      });
+    });
+  }*/
+
+
+  saveResourcesToDisk = (data: Resource[]) => {
+    if (this.isElectron) {
+      this.fs.writeFile(`${this.projectPath}\\${RESOURCES}`,
+        JSON.stringify(data, null, 4),
+        {
+          encoding: "utf8",
+          flag: "w",
+          mode: 0o666
+        },
+        (err) => {
+          if (err) console.error(err);
+        });
+    }
+  }
+  
+  getResourcesFromDisk = () => {
+    if (this.isElectron) {
+      let data = this.fs.readFileSync(`${this.projectPath}\\${RESOURCES}`, 'utf8');
+      return JSON.parse(data);
+    }
+    return [];
+  }
+
+
+  saveProjectToDisk = (data: Project) => {
+    if (this.isElectron) {
+      this.fs.writeFile(`${this.projectPath}\\${PROJECT}`,
+        JSON.stringify(data, null, 4),
+        {
+          encoding: "utf8",
+          flag: "w",
+          mode: 0o666
+        },
+        (err) => {
+          if (err) console.error(err);
+        });
+    }
+  }
+
+  getProjectFromDisk = () => {
+    if (this.isElectron) {
+      let data = this.fs.readFileSync(`${this.projectPath}\\${PROJECT}`, 'utf8');
+      return JSON.parse(data);
+    }
+    return [];
+  }
+
 
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);

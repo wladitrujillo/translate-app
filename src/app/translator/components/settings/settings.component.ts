@@ -36,7 +36,10 @@ export class SettingsComponent implements OnInit {
 
   onSubmit() {
     if (this.form.invalid) return;
-    this.service.updateProject(this.form.value);
+    this.project.name = this.form.value.name;
+    this.project.description = this.form.value.description;
+    this.project.baseLocale = this.form.value.baseLocale;
+    this.service.updateProject(this.project);
   }
 
   onRemoveLocale(locale: Locale) {

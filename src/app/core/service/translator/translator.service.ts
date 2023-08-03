@@ -3,61 +3,7 @@ import { Resource } from '../../model/resource';
 import { Locale } from '../../model/locale';
 import { Translation } from '../../model/translation';
 import { Project } from '../../model/project';
-
-let resources: Resource[] = [
-  {
-    id: "201520",
-    value: "La cuenta no existe",
-    translations: [
-      {
-        locale: 'ES-EC',
-        value: 'La cuenta no existe'
-      },
-      {
-        locale: 'ES-PA',
-        value: 'La operacion no existe'
-      }
-    ]
-  },
-  {
-    id: "201521",
-    value: "La cuenta esta bloqueada",
-    translations: [
-      {
-        locale: 'ES-EC',
-        value: 'La cuenta esta bloqueada'
-      },
-      {
-        locale: 'ES-PA',
-        value: 'La operacion esta bloqueada'
-      }
-    ]
-  },
-  {
-    id: "201522",
-    value: "La cuenta no tiene saldo",
-    translations: [
-      {
-        locale: 'ES-EC',
-        value: 'La cuenta no tiene saldo'
-      },
-      {
-        locale: 'ES-PA',
-        value: 'La operacion no tiene saldo'
-      }
-    ]
-  }
-];
-
-let project: Project = {
-  name: 'Project 1',
-  description: 'Project 1 description',
-  baseLocale: 'ES-EC',
-  locales: [
-    { id: 'ES-EC', name: 'Español Ecuador' },
-    { id: 'ES-PA', name: 'Español Panamá' }
-  ]
-}
+import { ElectronService } from '../electron/electron.service';
 
 
 let allLocales = [
@@ -77,69 +23,86 @@ let allLocales = [
 })
 export class TranslatorService {
 
-  constructor() { }
+  resources: Resource[] = [];
+  project: Project = {} as Project;
+
+  constructor(private electronService: ElectronService) {
+    this.project = this.electronService.getProjectFromDisk();
+    this.resources = this.electronService.getResourcesFromDisk();
+  }
 
   getResources(): Resource[] {
-    return resources;
+    return this.resources;
   }
 
   addResource(resource: Resource): void {
-    let found = resources.some((r: Resource) => r.id == resource.id);
+    let found = this.resources.some((r: Resource) => r.id == resource.id);
     if (found) {
       throw new Error('Resource already exists');
     }
     resource.translations = [];
-    project.locales.forEach((locale: Locale) => {
+    this.project.locales.forEach((locale: Locale) => {
       resource.translations.push({
         locale: locale.id,
         value: resource.value
       });
     });
-    resources.push(resource); // add resource to the end of the array
-
-
+    this.resources.push(resource); // add resource to the end of the array
+    this.electronService.saveResourcesToDisk(this.resources);
   }
 
+
   updateResource(resource: Resource): void {
-    let index = resources.findIndex((r: Resource) => r.id == resource.id);
-    resources[index] = resource; // replace resource at index
+    let index = this.resources.findIndex((r: Resource) => r.id == resource.id);
+    this.resources[index] = resource; // replace resource at index
+    this.electronService.saveResourcesToDisk(this.resources);
   }
 
   deleteResource(resourceId: string): void {
-    let index = resources.findIndex((r: Resource) => r.id == resourceId);
-    resources.splice(index, 1); // remove 1 element from index
+    let index = this.resources.findIndex((r: Resource) => r.id == resourceId);
+    this.resources.splice(index, 1); // remove 1 element from index
+    this.electronService.saveResourcesToDisk(this.resources);
   }
 
   updateTranslation(
     resourceId: string,
     translation: Translation): void {
-    let resource = resources.find((r: Resource) => r.id == resourceId);
+    let resource = this.resources.find((r: Resource) => r.id == resourceId);
     if (!resource) return;
     let index = resource.translations.findIndex((t: any) => t.locale == translation.locale);
     resource.translations[index] = translation;
-  
+    this.electronService.saveResourcesToDisk(this.resources);
   }
 
   addLocaleToAllResources(locale: Locale): void {
 
-    resources.forEach((resource: Resource) => {
-      let baseTranslation = resource.translations.find((t: Translation) => t.locale == project.baseLocale);
-      resource.translations.push({ locale: locale.id, value: baseTranslation?.value || '' });
+    this.resources.forEach((resource: Resource) => {
+      let baseTranslation = resource.translations
+        .find((t: Translation) =>
+          t.locale == this.project.baseLocale);
+      resource.translations.push({
+        locale: locale.id,
+        value: baseTranslation?.value || ''
+      });
     });
-    project.locales.push(locale);
+    this.project.locales.push(locale);
+    this.electronService.saveResourcesToDisk(this.resources);
+    this.electronService.saveProjectToDisk(this.project);
   }
 
   removeLocaleFromAllResources(locale: Locale): void {
-    resources.forEach((resource: Resource) => {
+    this.resources.forEach((resource: Resource) => {
       let index = resource.translations.findIndex((t: Translation) => t.locale == locale.id);
       resource.translations.splice(index, 1);
     });
-    let index = project.locales.findIndex((l: Locale) => l.id == locale.id);
-    project.locales.splice(index, 1);
+    let index = this.project.locales.findIndex((l: Locale) => l.id == locale.id);
+    this.project.locales.splice(index, 1);
+    this.electronService.saveResourcesToDisk(this.resources);
+    this.electronService.saveProjectToDisk(this.project);
   }
 
   getLocales(): Locale[] {
-    return project.locales;
+    return this.project.locales;
   }
 
   getAllLocales(): Locale[] {
@@ -147,15 +110,16 @@ export class TranslatorService {
   }
 
   getBaseLocale(): Locale | undefined {
-    return project.locales.find((locale: Locale) => locale.id == project.baseLocale);
+    return this.project.locales.find((locale: Locale) => locale.id == this.project.baseLocale);
   }
 
   getProject(): Project {
-    return project;
+    return this.project;
   }
 
   updateProject(project: Project): void {
     project = project;
+    this.electronService.saveProjectToDisk(project);
   }
 
 }
