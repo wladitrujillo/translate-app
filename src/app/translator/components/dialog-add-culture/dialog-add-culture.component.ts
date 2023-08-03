@@ -27,9 +27,10 @@ export class DialogAddCultureComponent implements OnInit {
       this.getAvailableLocales(allLocales, selectedLocales);
   }
 
-  onSubmit(locale:Locale) {
-    this.service.addLocale(locale);
-    this.dialogRef.close();
+  onSubmit(locale: Locale) {
+    if (!locale) return;
+    this.service.addLocaleToAllResources(locale);
+    this.dialogRef.close(true);
   }
 
   getAllLocales(): Locale[] {

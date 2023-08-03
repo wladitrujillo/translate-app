@@ -51,7 +51,8 @@ let resources: Resource[] = [
 
 let project: Project = {
   name: 'Project 1',
-  baseLocale: { id: 'ES-EC', name: 'Español Ecuador' },
+  description: 'Project 1 description',
+  baseLocale: 'ES-EC',
   locales: [
     { id: 'ES-EC', name: 'Español Ecuador' },
     { id: 'ES-PA', name: 'Español Panamá' }
@@ -116,12 +117,22 @@ export class ElectronService {
     resource.translations[index] = translation;
   }
 
-  addLocale(locale: Locale): void {
-    project.locales
-      .push(locale);
+  addLocaleToAllResources(locale: Locale): void {
+
     resources.forEach((resource: Resource) => {
-      resource.translations.push({ locale: locale.id, value: '' });
+      let baseTranslation = resource.translations.find((t: Translation) => t.locale == project.baseLocale);
+      resource.translations.push({ locale: locale.id, value: baseTranslation?.value || '' });
     });
+    project.locales.push(locale);
+  }
+
+  removeLocaleFromAllResources(locale: Locale): void {
+    resources.forEach((resource: Resource) => {
+      let index = resource.translations.findIndex((t: Translation) => t.locale == locale.id);
+      resource.translations.splice(index, 1);
+    });
+    let index = project.locales.findIndex((l: Locale) => l.id == locale.id);
+    project.locales.splice(index, 1);
   }
 
   getLocales(): Locale[] {
@@ -132,8 +143,8 @@ export class ElectronService {
     return allLocales;
   }
 
-  getBaseLocale(): Locale {
-    return project.baseLocale;
+  getBaseLocale(): Locale | undefined {
+    return project.locales.find((locale: Locale) => locale.id == project.baseLocale);
   }
 
   getProject(): Project {

@@ -9,7 +9,6 @@ import { DialogAddCultureComponent } from '../dialog-add-culture/dialog-add-cult
 import { DialogAddResourceComponent } from '../dialog-add-resource/dialog-add-resource.component';
 import { DialogConfirmRemoveComponent } from 'src/app/shared/components/dialog-confirm-remove/dialog-confirm-remove.component';
 import { ElectronService } from 'src/app/core/service/electron/electron.service';
-import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-editor',
@@ -23,7 +22,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   //from service
   resources: Resource[] = [];
   locales: Locale[] = [];
-  baseLocale: Locale = { id: '', name: '' };
+  baseLocale: Locale | undefined;
 
   //template variables
   selectedLocales: FormControl = new FormControl([]);
@@ -75,23 +74,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.resourcesView = this.filterResources('');
   }
 
-  openDialogAddCulture($event: Event): void {
-    $event.preventDefault();
-    $event.stopPropagation();
 
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.data = { locales: this.locales };
-    dialogConfig.width = '50%';
-
-    const dialogRef = this.dialog
-      .open(DialogAddCultureComponent, dialogConfig);
-
-    dialogRef.afterClosed()
-      .subscribe(result => { console.log(result) });
-
-  }
 
   openDialogAddResource(): void {
 
@@ -114,7 +97,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     dialogConfig.data = {
       title: "Recurso",
       message: `¿Está seguro que desea eliminar 
-      el recurso ${resource.id}?`
+      el recurso ${resource.id} con todas sus traducciones?`
     };
 
     const dialogRef = this.dialog

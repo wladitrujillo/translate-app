@@ -7,11 +7,18 @@
                 <mat-label>Culturas</mat-label>
                 <mat-select [compareWith]="compareCulture" multiple [formControl]="selectedLocales">
                     <mat-select-trigger fxLayout="row wrap">
-                        <span *ngFor="let locale of selectedLocales.value; let last = last"
-                            class="example-additional-selection">
-                            {{locale.id}} {{last ? '' : ', '}}
+                        {{selectedLocales.value?.[0]?.id || ''}}
+                        <span *ngIf="(selectedLocales.value?.length||0)>1">
+                            (+{{(selectedLocales.value?.length || 0) - 1}}
+                            {{selectedLocales.value?.length === 2 ?
+                            'lenguaje' : 'lenguajes'}})
                         </span>
                     </mat-select-trigger>
+                    <!--mat-select-trigger fxLayout="row wrap">
+                        <span *ngFor="let locale of selectedLocales.value; let last = last">
+                            {{locale.id}} {{last ? '' : ', '}}
+                        </span>
+                    </mat-select-trigger-->
                     <mat-option *ngFor="let locale of locales" [value]="locale">
                         <ng-container [ngTemplateOutlet]="customTemplate" [ngTemplateOutletContext]="{locale:locale}">
                         </ng-container>
@@ -19,9 +26,6 @@
                     <ng-template #customTemplate let-locale="locale">
                         {{locale.id}} {{locale.name}}
                     </ng-template>
-                    <mat-divider></mat-divider>
-                    <button mat-button class="full-width" (click)="openDialogAddCulture($event)" id="addCulture">Agregar
-                        Cultura</button>
                 </mat-select>
             </mat-form-field>
 

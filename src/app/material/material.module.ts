@@ -12,6 +12,8 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatTableModule} from '@angular/material/table';
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   declarations: [],
@@ -30,7 +32,9 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatButtonModule,
     MatTooltipModule,
     MatCheckboxModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTableModule,
+    MatCardModule
   ]
 })
 export class MaterialModule { }
