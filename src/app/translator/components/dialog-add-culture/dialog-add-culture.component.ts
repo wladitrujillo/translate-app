@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Locale } from 'src/app/core/model/locale';
-import { ElectronService } from 'src/app/core/service/electron/electron.service';
+import { TranslatorService } from 'src/app/core/service/translator/translator.service';
 
 @Component({
   selector: 'app-dialog-add-culture',
@@ -18,7 +18,7 @@ export class DialogAddCultureComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<DialogAddCultureComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any,
-    private service: ElectronService) { }
+    private service: TranslatorService) { }
 
   ngOnInit(): void {
     let selectedLocales = this.data.locales;

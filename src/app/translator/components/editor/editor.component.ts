@@ -5,10 +5,9 @@ import { Locale } from 'src/app/core/model/locale';
 import { Resource } from 'src/app/core/model/resource';
 import { Translation } from 'src/app/core/model/translation';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DialogAddCultureComponent } from '../dialog-add-culture/dialog-add-culture.component';
 import { DialogAddResourceComponent } from '../dialog-add-resource/dialog-add-resource.component';
 import { DialogConfirmRemoveComponent } from 'src/app/shared/components/dialog-confirm-remove/dialog-confirm-remove.component';
-import { ElectronService } from 'src/app/core/service/electron/electron.service';
+import { TranslatorService } from 'src/app/core/service/translator/translator.service';
 
 @Component({
   selector: 'app-editor',
@@ -31,7 +30,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
 
   constructor(private dialog: MatDialog,
-    private service: ElectronService) { }
+    private service: TranslatorService) { }
 
   ngAfterViewInit(): void {
     fromEvent(this.matInput.nativeElement, 'keyup')

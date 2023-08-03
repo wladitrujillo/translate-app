@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Locale } from 'src/app/core/model/locale';
 import { Project } from 'src/app/core/model/project';
-import { ElectronService } from 'src/app/core/service/electron/electron.service';
 import { DialogAddCultureComponent } from '../dialog-add-culture/dialog-add-culture.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogConfirmRemoveComponent } from 'src/app/shared/components/dialog-confirm-remove/dialog-confirm-remove.component';
+import { TranslatorService } from 'src/app/core/service/translator/translator.service';
 
 @Component({
   selector: 'app-settings',
@@ -21,7 +21,7 @@ export class SettingsComponent implements OnInit {
   dataSource: MatTableDataSource<Locale> = new MatTableDataSource<Locale>();
   constructor(private formBuider: FormBuilder,
     private dialog: MatDialog,
-    private service: ElectronService) { }
+    private service: TranslatorService) { }
 
   ngOnInit(): void {
 
