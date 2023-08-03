@@ -2,7 +2,7 @@
 
     <div class="row">
 
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" style="margin-top: 15px;">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <mat-card>
                 <mat-card-header>
                     <mat-card-title>Configuración General</mat-card-title>
@@ -39,11 +39,8 @@
         </form>
     </div>
 
-    <div class="row">
 
-        <div class="title">
-            <span>Culturas</span>
-        </div>
+    <div class="row" style="margin-top: 25px;">
 
         <div class="table-control-actions">
             <button mat-raised-button color="primary" (click)="openDialogAddCulture()">Agregar Cultura</button>

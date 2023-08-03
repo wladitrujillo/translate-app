@@ -110,6 +110,7 @@ export class TranslatorService {
   }
 
   getBaseLocale(): Locale | undefined {
+    if (!this.project.locales) return undefined;
     return this.project.locales.find((locale: Locale) => locale.id == this.project.baseLocale);
   }
 

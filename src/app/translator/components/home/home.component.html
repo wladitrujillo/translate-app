@@ -1,4 +1,4 @@
-<mat-tab-group>
+<mat-tab-group class="top-tab-group">
     <mat-tab>
         <ng-template mat-tab-label>
             <mat-icon class="example-tab-icon">local_library</mat-icon>
@@ -6,15 +6,6 @@
         </ng-template>
         <app-editor></app-editor>
     </mat-tab>
-
-    <mat-tab>
-        <ng-template mat-tab-label>
-            <mat-icon class="example-tab-icon">cloud_upload</mat-icon>
-            Cargar
-        </ng-template>
-        <app-uploader></app-uploader>
-    </mat-tab>
-
     <mat-tab>
         <ng-template mat-tab-label>
             <mat-icon class="example-tab-icon">cloud_download</mat-icon>
@@ -28,5 +19,12 @@
             Configuración
         </ng-template>
         <app-settings></app-settings>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">cloud_upload</mat-icon>
+            Cargar
+        </ng-template>
+        <app-uploader></app-uploader>
     </mat-tab>
 </mat-tab-group>
