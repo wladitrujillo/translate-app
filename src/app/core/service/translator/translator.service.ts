@@ -118,7 +118,6 @@ export class TranslatorService {
   }
 
   updateProject(project: Project): void {
-    project = project;
     this.electronService.saveProjectToDisk(project);
   }
 

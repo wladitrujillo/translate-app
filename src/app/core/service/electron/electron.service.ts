@@ -25,7 +25,7 @@ export class ElectronService {
 
   constructor() {
 
-    this.projectPath = "C:\\Users\\wladi\\Documents\\electron-files";
+    this.projectPath = "C:\\electron\\data";
 
     // Conditional imports
     if (this.isElectron) {
