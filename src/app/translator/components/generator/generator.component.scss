@@ -10,3 +10,7 @@
 .full-width {
     width: 100%;
 }
+
+::ng-deep .check-all .mdc-label {
+    margin-left: 15px;
+}

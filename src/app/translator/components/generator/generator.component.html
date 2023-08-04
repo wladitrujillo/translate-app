@@ -33,6 +33,10 @@
                         </mat-panel-description>
                     </mat-expansion-panel-header>
                     <mat-selection-list [compareWith]="compareLocales" multiple [formControl]="selectedLocales">
+                        <mat-checkbox class="check-all" [indeterminate]="isAllLocalesIndeterminate()" [checked]="isAllLocalesChecked()" (change)="allLocalesSelection($event)" style="padding-left: 10px;">
+                            Todos ( {{selectedLocales.value?.length || 0}} / {{locales.length}} ) 
+                        </mat-checkbox>
+                        <mat-divider></mat-divider>
                         <mat-list-option checkboxPosition="before" [value]="locale" *ngFor="let locale of locales;">
                             {{ locale.name }}
                         </mat-list-option>

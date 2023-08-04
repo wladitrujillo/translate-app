@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { GeneratorService } from '@core/service/electron/generator.service';
 import { ProjectService } from '@core/service/translator/project.service';
 import { Locale } from 'src/app/core/model/locale';
@@ -55,5 +56,21 @@ export class GeneratorComponent implements OnInit {
   compareLocales(locale1: Locale, locale2: Locale): boolean {
     return locale1 && locale2 ?
       locale1.id === locale2.id : locale1 === locale2;
+  }
+
+  isAllLocalesChecked(): boolean {
+    return this.selectedLocales.value?.length === this.locales.length;
+  }
+
+  isAllLocalesIndeterminate(): boolean {
+    return this.selectedLocales.value?.length > 0 && this.selectedLocales.value?.length < this.locales.length;
+  }
+
+  allLocalesSelection(change: MatCheckboxChange): void {
+    if (change.checked) {
+      this.selectedLocales.setValue(this.locales);
+    } else {
+      this.selectedLocales.setValue([]);
+    }
   }
 }
