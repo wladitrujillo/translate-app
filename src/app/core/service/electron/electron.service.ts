@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { ipcRenderer, webFrame } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
+
 import { Resource } from '../../model/resource';
 import { Project } from '../../model/project';
 import { Locale } from '../../model/locale';
@@ -121,15 +122,6 @@ export class ElectronService {
     return [];
   }
 
-  generateSql = (locales: Locale[]) => {
-    if (this.isElectron) {
-      this.ipcRenderer.invoke('generateSql', locales).then((result: any) => {
-        console.log(result);
-      }).catch((error: any) => {
-        console.log(error);
-      });
-    }
-  }
 
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);

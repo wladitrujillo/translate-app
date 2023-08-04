@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { GeneratorService } from '@core/service/electron/generator.service';
 import { ProjectService } from '@core/service/translator/project.service';
 import { Locale } from 'src/app/core/model/locale';
 
@@ -18,7 +19,9 @@ export class ConverterComponent implements OnInit {
 
   formats: { value: string, description: string }[] = [];
 
-  constructor(private projectService: ProjectService) { }
+  constructor(
+    private projectService: ProjectService,
+    private generator: GeneratorService) { }
 
   ngOnInit(): void {
     this.locales = this.projectService.getLocales();
@@ -40,14 +43,12 @@ export class ConverterComponent implements OnInit {
 
     let fileFormat: string = this.fileFormat.value;
 
-    if (fileFormat == 'sql') {
-      // this.service.exportToSql(locales);
+    if (fileFormat == 'mysql') {
+      this.generator.exportToMySql(locales);
+    } else if (fileFormat == 'sqlserver') {
+      this.generator.exportToSqlServer(locales);
     } else if (fileFormat == 'json') {
-      // this.service.exportToJson(locales);
-    } else if (fileFormat == 'xml') {
-      // this.service.exportToXml(locales);
-    } else if (fileFormat == 'csv') {
-      // this.service.exportToCsv(locales);
+      this.generator.exportToJson(locales);
     }
   }
 
