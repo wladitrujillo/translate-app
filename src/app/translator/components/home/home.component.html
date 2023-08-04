@@ -14,14 +14,18 @@
             <mat-icon class="example-tab-icon">settings</mat-icon>
             Configuración
         </ng-template>
-        <app-settings></app-settings>
+        <ng-template matTabContent>
+            <app-settings></app-settings>
+        </ng-template>
     </mat-tab>
     <mat-tab>
         <ng-template mat-tab-label>
             <mat-icon class="example-tab-icon">cloud_download</mat-icon>
             Descargar
         </ng-template>
-        <app-converter></app-converter>
+        <ng-template matTabContent>
+            <app-converter></app-converter>
+        </ng-template>
     </mat-tab>
     <mat-tab>
         <ng-template mat-tab-label>

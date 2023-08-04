@@ -26,6 +26,7 @@ export class ResourceService {
   }
 
   getResources(): Resource[] {
+    this.resources = this.electronService.getResourcesFromDisk();
     return this.resources;
   }
 
