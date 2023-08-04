@@ -38,7 +38,7 @@
                         <mat-panel-description>
                         </mat-panel-description>
                     </mat-expansion-panel-header>
-                    <mat-selection-list [compareWith]="compareLocales" multiple>
+                    <mat-selection-list [compareWith]="compareLocales" multiple [formControl]="selectedLocales">
                         <mat-list-option checkboxPosition="before" [value]="locale"
                             *ngFor="let locale of locales; trackBy: locale?.id;">
                             {{ locale.name }}
@@ -50,7 +50,7 @@
         </div>
 
         <div class="col-md-3">
-            <button mat-raised-button color="primary" (click)="convert()" class="full-width">Generar</button>
+            <button mat-raised-button color="primary" (click)="generate()" class="full-width">Generar</button>
         </div>
     </div>
 </div>

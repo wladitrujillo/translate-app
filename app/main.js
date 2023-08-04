@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const path = require("path");
 const fs = require("fs");
+const electron_2 = require("electron");
 let win = null;
 const args = process.argv.slice(1), serve = args.some(val => val === '--serve');
 function createWindow() {
@@ -45,6 +46,9 @@ function createWindow() {
     return win;
 }
 try {
+    electron_2.ipcMain.handle('generateSql', (event, args) => {
+        console.log('On App: ', event, args);
+    });
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.

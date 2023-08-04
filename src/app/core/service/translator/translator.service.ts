@@ -122,4 +122,8 @@ export class TranslatorService {
     this.electronService.saveProjectToDisk(project);
   }
 
+  exportToSql(locales: Locale[]): void {
+    this.electronService.generateSql(locales);
+  }
+
 }

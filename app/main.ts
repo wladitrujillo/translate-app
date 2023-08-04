@@ -1,6 +1,7 @@
 import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
+import { ipcMain } from 'electron';
 
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1),
@@ -54,6 +55,10 @@ function createWindow(): BrowserWindow {
 }
 
 try {
+
+    ipcMain.handle('generateSql', (event, args) => {
+        console.log('On App: ', event, args);
+    });
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
@@ -76,6 +81,8 @@ try {
             createWindow();
         }
     });
+
+
 
 } catch (e) {
     // Catch Error

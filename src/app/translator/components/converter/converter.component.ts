@@ -22,7 +22,7 @@ export class ConverterComponent implements OnInit {
     this.locales = this.service.getLocales();
   }
 
-  convert() {
+  generate() {
   
       let locales: Locale[] = this.selectedLocales.value;
   
@@ -34,7 +34,7 @@ export class ConverterComponent implements OnInit {
       let fileFormat: string = this.fileFormat.value;
   
       if (fileFormat == 'sql') {
-       // this.service.exportToSql(locales);
+        this.service.exportToSql(locales);
       } else if (fileFormat == 'json') {
        // this.service.exportToJson(locales);
       } else if (fileFormat == 'xml') {

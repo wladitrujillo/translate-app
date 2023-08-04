@@ -7,6 +7,7 @@ import * as childProcess from 'child_process';
 import * as fs from 'fs';
 import { Resource } from '../../model/resource';
 import { Project } from '../../model/project';
+import { Locale } from '../../model/locale';
 
 const RESOURCES: string = "resources.json";
 const PROJECT: string = "project.json";
@@ -87,7 +88,7 @@ export class ElectronService {
         });
     }
   }
-  
+
   getResourcesFromDisk = () => {
     if (this.isElectron) {
       let data = this.fs.readFileSync(`${this.projectPath}\\${RESOURCES}`, 'utf8');
@@ -120,9 +121,20 @@ export class ElectronService {
     return [];
   }
 
+  generateSql = (locales: Locale[]) => {
+    if (this.isElectron) {
+      this.ipcRenderer.invoke('generateSql', locales).then((result: any) => {
+        console.log(result);
+      }).catch((error: any) => {
+        console.log(error);
+      });
+    }
+  }
 
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);
   }
+
+
 
 }
