@@ -7,7 +7,7 @@
 
 
             <mat-accordion [togglePosition]="'before'">
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header>
                         <mat-panel-title>
                             Formato de Archivo
@@ -18,14 +18,8 @@
                     <mat-form-field class="full-width">
                         <mat-label>Formato</mat-label>
                         <mat-select [formControl]="fileFormat">
-                            <mat-option value="sql">
-                                Sql-Mysql (.sql)
-                            </mat-option>
-                            <mat-option value="json">
-                                Json (.json)
-                            </mat-option>
-                            <mat-option value="javascript">
-                                Javascript (.js)
+                            <mat-option *ngFor="let format of formats" [value]="format.value">
+                                {{format.description}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -39,8 +33,7 @@
                         </mat-panel-description>
                     </mat-expansion-panel-header>
                     <mat-selection-list [compareWith]="compareLocales" multiple [formControl]="selectedLocales">
-                        <mat-list-option checkboxPosition="before" [value]="locale"
-                            *ngFor="let locale of locales;">
+                        <mat-list-option checkboxPosition="before" [value]="locale" *ngFor="let locale of locales;">
                             {{ locale.name }}
                         </mat-list-option>
                     </mat-selection-list>

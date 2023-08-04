@@ -5,7 +5,7 @@
     "name": "Nelson Trujillo",
     "email": "wladimir.trujillo.ec@gmail.com"
   },
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "app/main.js",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
