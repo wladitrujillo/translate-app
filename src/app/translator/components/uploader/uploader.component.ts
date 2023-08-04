@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class UploaderComponent {
 
+  onFileSelected(event: any) {
+    console.log(event);
+    console.log(event.target.files[0]);
+  }
 }
