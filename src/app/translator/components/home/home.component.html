@@ -1,17 +1,13 @@
-<mat-tab-group class="top-tab-group">
+<mat-tab-group class="top-tab-group" contentPreserve="true">
     <mat-tab>
         <ng-template mat-tab-label>
             <mat-icon class="example-tab-icon">local_library</mat-icon>
             Editor
         </ng-template>
-        <app-editor></app-editor>
-    </mat-tab>
-    <mat-tab>
-        <ng-template mat-tab-label>
-            <mat-icon class="example-tab-icon">cloud_download</mat-icon>
-            Descargar
+
+        <ng-template matTabContent>
+            <app-editor></app-editor>
         </ng-template>
-        <app-converter></app-converter>
     </mat-tab>
     <mat-tab>
         <ng-template mat-tab-label>
@@ -19,6 +15,13 @@
             Configuración
         </ng-template>
         <app-settings></app-settings>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">cloud_download</mat-icon>
+            Descargar
+        </ng-template>
+        <app-converter></app-converter>
     </mat-tab>
     <mat-tab>
         <ng-template mat-tab-label>

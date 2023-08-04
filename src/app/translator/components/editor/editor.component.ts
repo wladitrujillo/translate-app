@@ -7,7 +7,8 @@ import { Translation } from 'src/app/core/model/translation';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogAddResourceComponent } from '../dialog-add-resource/dialog-add-resource.component';
 import { DialogConfirmRemoveComponent } from 'src/app/shared/components/dialog-confirm-remove/dialog-confirm-remove.component';
-import { TranslatorService } from 'src/app/core/service/translator/translator.service';
+import { ResourceService } from '@core/service/translator/resource.service';
+import { ProjectService } from '@core/service/translator/project.service';
 
 @Component({
   selector: 'app-editor',
@@ -30,7 +31,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
 
   constructor(private dialog: MatDialog,
-    private service: TranslatorService) { }
+    private resourceService: ResourceService,
+    private projectService: ProjectService) { }
 
   ngAfterViewInit(): void {
     fromEvent(this.matInput.nativeElement, 'keyup')
@@ -107,7 +109,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
       .subscribe(acceptedDelete => {
         if (acceptedDelete) {
           console.log("Borrando recurso...");
-          this.service.deleteResource(resource.id);
+          this.resourceService.deleteResource(resource.id);
         }
       });
 
@@ -118,7 +120,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     translation: Translation,
     inputValue: string): void {
     translation.value = inputValue;
-    this.service.updateTranslation(resource.id, translation);
+    this.resourceService.updateTranslation(resource.id, translation);
     this.selectedTranslation = null;
   }
 
@@ -128,9 +130,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   private loadData(): void {
-    this.locales = this.service.getLocales();
-    this.resources = this.service.getResources();
-    this.baseLocale = this.service.getBaseLocale();
+    this.locales = this.projectService.getLocales();
+    this.baseLocale = this.projectService.getBaseLocale();
+    this.resources = this.resourceService.getResources();
   }
 
   private filterResources(text: string) {

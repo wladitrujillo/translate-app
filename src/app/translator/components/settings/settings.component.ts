@@ -6,7 +6,7 @@ import { Project } from 'src/app/core/model/project';
 import { DialogAddCultureComponent } from '../dialog-add-culture/dialog-add-culture.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogConfirmRemoveComponent } from 'src/app/shared/components/dialog-confirm-remove/dialog-confirm-remove.component';
-import { TranslatorService } from 'src/app/core/service/translator/translator.service';
+import { ProjectService } from '@core/service/translator/project.service';
 
 @Component({
   selector: 'app-settings',
@@ -21,7 +21,7 @@ export class SettingsComponent implements OnInit {
   dataSource: MatTableDataSource<Locale> = new MatTableDataSource<Locale>();
   constructor(private formBuider: FormBuilder,
     private dialog: MatDialog,
-    private service: TranslatorService) { }
+    private projectService: ProjectService) { }
 
   ngOnInit(): void {
 
@@ -39,7 +39,7 @@ export class SettingsComponent implements OnInit {
     this.project.name = this.form.value.name;
     this.project.description = this.form.value.description;
     this.project.baseLocale = this.form.value.baseLocale;
-    this.service.updateProject(this.project);
+    this.projectService.updateProject(this.project);
   }
 
   onRemoveLocale(locale: Locale) {
@@ -55,7 +55,7 @@ export class SettingsComponent implements OnInit {
       .subscribe(result => {
         console.log(this.dataSource);
         if (result) {
-          this.service.removeLocaleFromAllResources(locale);
+          this.projectService.removeLocaleFromAllResources(locale);
           this.loadData();
         }
       });
@@ -75,7 +75,7 @@ export class SettingsComponent implements OnInit {
   }
 
   loadData() {
-    this.project = this.service.getProject();
+    this.project = this.projectService.getProject();
     this.dataSource.data = this.project.locales;
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ProjectService } from '@core/service/translator/project.service';
 import { Locale } from 'src/app/core/model/locale';
-import { TranslatorService } from 'src/app/core/service/translator/translator.service';
 
 @Component({
   selector: 'app-converter',
@@ -16,32 +16,32 @@ export class ConverterComponent implements OnInit {
 
   locales: Locale[] = [];
 
-  constructor(private service: TranslatorService) { }
+  constructor(private projectService: ProjectService) { }
 
   ngOnInit(): void {
-    this.locales = this.service.getLocales();
+    this.locales = this.projectService.getLocales();
   }
 
   generate() {
-  
-      let locales: Locale[] = this.selectedLocales.value;
-  
-      if (locales.length == 0) {
-        alert('Debe seleccionar al menos una cultura');
-        return;
-      }
-  
-      let fileFormat: string = this.fileFormat.value;
-  
-      if (fileFormat == 'sql') {
-        this.service.exportToSql(locales);
-      } else if (fileFormat == 'json') {
-       // this.service.exportToJson(locales);
-      } else if (fileFormat == 'xml') {
-       // this.service.exportToXml(locales);
-      } else if (fileFormat == 'csv') {
-       // this.service.exportToCsv(locales);
-      } 
+
+    let locales: Locale[] = this.selectedLocales.value;
+
+    if (locales.length == 0) {
+      alert('Debe seleccionar al menos una cultura');
+      return;
+    }
+
+    let fileFormat: string = this.fileFormat.value;
+
+    if (fileFormat == 'sql') {
+     // this.service.exportToSql(locales);
+    } else if (fileFormat == 'json') {
+      // this.service.exportToJson(locales);
+    } else if (fileFormat == 'xml') {
+      // this.service.exportToXml(locales);
+    } else if (fileFormat == 'csv') {
+      // this.service.exportToCsv(locales);
+    }
   }
 
   compareLocales(locale1: Locale, locale2: Locale): boolean {

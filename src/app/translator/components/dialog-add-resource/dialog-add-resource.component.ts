@@ -1,7 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TranslatorService } from 'src/app/core/service/translator/translator.service';
+import { Locale } from '@core/model/locale';
+import { Resource } from '@core/model/resource';
+import { ResourceService } from '@core/service/translator/resource.service';
 
 @Component({
   selector: 'app-dialog-add-resource',
@@ -16,7 +18,7 @@ export class DialogAddResourceComponent implements OnInit {
     private dialogRef: MatDialogRef<DialogAddResourceComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any,
     private formBuilder: FormBuilder,
-    private service: TranslatorService) { }
+    private resourceService: ResourceService) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -25,10 +27,19 @@ export class DialogAddResourceComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmitAddResource() {
     if (this.form.invalid) return;
     try {
-      this.service.addResource(this.form.value);
+      let resource: Resource = {} as Resource;
+      resource.id = this.form.value.id;
+      resource.translations = [];
+      this.data.locales.forEach((locale: Locale) => {
+        resource.translations.push({
+          locale: locale.id,
+          value: locale.id == this.data.baseLocale.id ? this.form.value.value : `(${locale.id}) - ${this.form.value.value}`
+        });
+      });
+      this.resourceService.addResource(resource);
       this.dialogRef.close(true);
     } catch (e) {
       console.error(e);
