@@ -40,7 +40,7 @@
                     </mat-expansion-panel-header>
                     <mat-selection-list [compareWith]="compareLocales" multiple [formControl]="selectedLocales">
                         <mat-list-option checkboxPosition="before" [value]="locale"
-                            *ngFor="let locale of locales; trackBy: locale?.id;">
+                            *ngFor="let locale of locales;">
                             {{ locale.name }}
                         </mat-list-option>
                     </mat-selection-list>
