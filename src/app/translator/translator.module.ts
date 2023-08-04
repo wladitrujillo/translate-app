@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HomeComponent } from './components/home/home.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { UploaderComponent } from './components/uploader/uploader.component';
-import { ConverterComponent } from './components/converter/converter.component';
+import { GeneratorComponent } from './components/generator/generator.component';
 import { SharedModule } from '../shared/shared.module';
 import { TranslatorRoutingModule } from './translator.routing.module';
 import { MaterialModule } from '../material/material.module';
@@ -20,7 +20,7 @@ import { CoreModule } from '../core/core.module';
     HomeComponent,
     EditorComponent,
     UploaderComponent,
-    ConverterComponent,
+    GeneratorComponent,
     DialogAddCultureComponent,
     DialogAddResourceComponent,
     SettingsComponent

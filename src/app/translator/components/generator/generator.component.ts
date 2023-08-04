@@ -5,11 +5,11 @@ import { ProjectService } from '@core/service/translator/project.service';
 import { Locale } from 'src/app/core/model/locale';
 
 @Component({
-  selector: 'app-converter',
-  templateUrl: './converter.component.html',
-  styleUrls: ['./converter.component.scss']
+  selector: 'app-generator',
+  templateUrl: './generator.component.html',
+  styleUrls: ['./generator.component.scss']
 })
-export class ConverterComponent implements OnInit {
+export class GeneratorComponent implements OnInit {
 
   panelOpenState = false;
   fileFormat: FormControl = new FormControl('mysql');
