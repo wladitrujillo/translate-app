@@ -20,14 +20,13 @@ export class EditorComponent implements OnInit, AfterViewInit {
   @ViewChild('searchInput') matInput!: ElementRef;
 
   //from service
-  resources: Resource[] = [];
   locales: Locale[] = [];
   baseLocale: Locale | undefined;
 
   //template variables
   selectedLocales: FormControl = new FormControl([]);
   selectedTranslation: Translation | null = null;
-  resourcesView: Resource[] = [];
+  resources: Resource[] = [];
 
 
   constructor(private dialog: MatDialog,
@@ -45,16 +44,18 @@ export class EditorComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe(() => {
-        this.resourcesView =
-          this.filterResources(this.matInput.nativeElement.value);
+        this.resources =
+          this.resourceService.getResourcesFilterByText(this.matInput.nativeElement.value);
       });
   }
 
   ngOnInit(): void {
 
     this.loadData();
+    this.locales = this.projectService.getLocales();
+    this.baseLocale = this.projectService.getBaseLocale();
+    this.resources = this.resourceService.getResources();
     this.selectedLocales.setValue([this.baseLocale]);
-    this.resourcesView = this.resources;
 
   }
 
@@ -72,7 +73,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   clearSearch(): void {
     this.matInput.nativeElement.value = '';
-    this.resourcesView = this.filterResources('');
+    this.resources = this.resourceService.getResources();
   }
 
 
@@ -130,21 +131,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   private loadData(): void {
-    this.locales = this.projectService.getLocales();
-    this.baseLocale = this.projectService.getBaseLocale();
-    this.resources = this.resourceService.getResources();
+
   }
 
-  private filterResources(text: string) {
-    if (!text) {
-      return this.resources;
-    }
-    return this.resources
-      .filter((resource) => {
-        return resource.id.includes(text) ||
-          resource.translations.some((translation) => {
-            return translation.value.includes(text);
-          });
-      });
-  }
 }
