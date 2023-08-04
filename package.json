@@ -1,8 +1,14 @@
 {
   "name": "translate-app",
+  "description": "App build with electron and angular to manage translations",
+  "author": {
+    "name": "Nelson Trujillo",
+    "email": "wladimir.trujillo.ec@gmail.com"
+  },
   "version": "0.0.0",
   "main": "app/main.js",
   "scripts": {
+    "postinstall": "electron-builder install-app-deps",
     "ng": "ng",
     "start": "npm-run-all -p electron:serve ng:serve",
     "ng:serve": "ng serve -c web -o",
