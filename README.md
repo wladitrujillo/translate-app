@@ -2,9 +2,30 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.6.
 
+# Project structure
+
+| Resource                  | Description                   |
+|---------------------------|-------------------------------|
+| app                       | Electron source               |
+| src                       | Angular source                |
+| angular.json              | Angular build config          |
+| electron-builder.json     | Electron buil config          |
+| tsconfig.json             | Angular TS config             |
+| tsconfig.electron.json    | Electron TS config            |
+| package.json              | Dependendences and scripts    |
+
+# Angular modules
+
+| Name          | Description                           |
+|---------------|---------------------------------------|
+| core          | Module with electron events           |
+| material      | Angular Material modules              |
+| shared        | Commons and utils                     |
+| transalor     | editor, config, generator, uploader   |
+
 ## Development server
 
-Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Run `npm start` for a dev server. It will open a new electron window. The application will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
@@ -16,16 +37,3 @@ Run `npm run web:build` to build the project. The build artifacts will be stored
 ## Build electron app
 
 Run `npm run electron:build` to build the electron app. The build artifacts will be stored in `realse/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-
