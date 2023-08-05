@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Locale } from '@core/model/locale';
 import { Resource } from '@core/model/resource';
 import { ResourceService } from '@core/service/translator/resource.service';
+import { NotificationService } from '@shared/service/notification.service';
 
 @Component({
   selector: 'app-dialog-add-resource',
@@ -18,7 +19,8 @@ export class DialogAddResourceComponent implements OnInit {
     private dialogRef: MatDialogRef<DialogAddResourceComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any,
     private formBuilder: FormBuilder,
-    private resourceService: ResourceService) { }
+    private resourceService: ResourceService,
+    private notification: NotificationService) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -43,7 +45,7 @@ export class DialogAddResourceComponent implements OnInit {
       this.dialogRef.close(true);
     } catch (e) {
       console.error(e);
-      alert(e);
+      this.notification.error(e as string);
     }
   }
 

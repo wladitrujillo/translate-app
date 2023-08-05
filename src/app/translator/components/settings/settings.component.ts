@@ -7,6 +7,7 @@ import { DialogAddCultureComponent } from '../dialog-add-culture/dialog-add-cult
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogConfirmRemoveComponent } from 'src/app/shared/components/dialog-confirm-remove/dialog-confirm-remove.component';
 import { ProjectService } from '@core/service/translator/project.service';
+import { NotificationService } from '@shared/service/notification.service';
 
 @Component({
   selector: 'app-settings',
@@ -21,7 +22,8 @@ export class SettingsComponent implements OnInit {
   dataSource: MatTableDataSource<Locale> = new MatTableDataSource<Locale>();
   constructor(private formBuider: FormBuilder,
     private dialog: MatDialog,
-    private projectService: ProjectService) { }
+    private projectService: ProjectService,
+    private notification: NotificationService) { }
 
   ngOnInit(): void {
 
@@ -45,7 +47,7 @@ export class SettingsComponent implements OnInit {
   onRemoveLocale(locale: Locale) {
 
     if (this.project.baseLocale == locale.id) {
-      alert('No se puede eliminar la cultura base');
+      this.notification.warning('No puede eliminar la cultura base');
       return;
     }
 
@@ -85,7 +87,7 @@ export class SettingsComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.data = data;
-    dialogConfig.width = '30%';
+    dialogConfig.width = '50%';
     return this.dialog.open(componet, dialogConfig);
 
   }
