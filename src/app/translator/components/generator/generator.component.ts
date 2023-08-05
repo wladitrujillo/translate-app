@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { GeneratorService } from '@core/service/electron/generator.service';
 import { ProjectService } from '@core/service/translator/project.service';
+import { NotificationService } from '@shared/service/notification.service';
 import { Locale } from 'src/app/core/model/locale';
 
 @Component({
@@ -22,7 +23,8 @@ export class GeneratorComponent implements OnInit {
 
   constructor(
     private projectService: ProjectService,
-    private generator: GeneratorService) { }
+    private generator: GeneratorService,
+    private notification: NotificationService) { }
 
   ngOnInit(): void {
     this.locales = this.projectService.getLocales();
@@ -38,7 +40,7 @@ export class GeneratorComponent implements OnInit {
     let locales: Locale[] = this.selectedLocales.value;
 
     if (locales.length == 0) {
-      alert('Debe seleccionar al menos una cultura');
+      this.notification.warning('Debe seleccionar al menos una cultura');
       return;
     }
 

@@ -83,6 +83,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
+    dialogConfig.data = {locales: this.locales, baseLocale: this.baseLocale}
 
     const dialogRef = this.dialog
       .open(DialogAddResourceComponent, dialogConfig);

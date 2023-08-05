@@ -18,7 +18,7 @@ export class ResourceService {
   addResource(resource: Resource): void {
     let found = this.resources.some((r: Resource) => r.id == resource.id);
     if (found) {
-      throw new Error('Resource already exists');
+      throw new Error(`El recurso con identificador ${resource.id} ya existe`);
     }
 
     this.resources.push(resource); // add resource to the end of the array

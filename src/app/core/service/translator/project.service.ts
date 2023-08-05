@@ -48,6 +48,10 @@ export class ProjectService {
 
   removeLocaleFromAllResources(locale: Locale): void {
 
+    if(locale.id == this.project.baseLocale) {
+      throw new Error('No puede eliminar la cultura base');
+    }
+
     let resources = this.electronService.getResourcesFromDisk();
     resources.forEach((resource: Resource) => {
       let index = resource.translations.findIndex((t: Translation) => t.locale == locale.id);
