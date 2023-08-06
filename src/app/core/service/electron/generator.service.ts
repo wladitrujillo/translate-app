@@ -92,7 +92,7 @@ export class GeneratorService {
     header += `CREATE PROCEDURE ${procedureName}()\n`;
     header += 'BEGIN\n';
 
-    const resources = JSON.parse(this.fs.readFileSync(`${this.projectPath}\\resources.json`, 'utf8'));
+    const resources = JSON.parse(this.fs.readFileSync(`${this.appDataPath}\\resources.json`, 'utf8'));
     let body = '';
     resources.forEach((resource: any) => {
       body += this.toMySql(resource, locales);
@@ -121,7 +121,8 @@ export class GeneratorService {
         locales.map((locale: Locale) => locale.id));
 
       if (this.isElectron) {
-        const pathToResult = `${this.projectPath}\\COBIS_mysql_${locale.id}.sql`;
+        this.createBuildFolder();
+        const pathToResult = `${this.appBuildPath}\\COBIS_mysql_${locale.id}.sql`;
         this.fs.appendFileSync(pathToResult, sql);
       }
     }
@@ -135,7 +136,8 @@ export class GeneratorService {
         locales.map((locale: Locale) => locale.id));
 
       if (this.isElectron) {
-        const pathToResult = `${this.projectPath}\\COBIS_sqlserver_${locale.id}.sql`;
+        this.createBuildFolder();
+        const pathToResult = `${this.appBuildPath}\\COBIS_sqlserver_${locale.id}.sql`;
         this.fs.appendFileSync(pathToResult, sql);
       }
     }
@@ -143,7 +145,7 @@ export class GeneratorService {
 
   exportToJson(locales: Locale[]): void {
 
-    const resources = JSON.parse(this.fs.readFileSync(`${this.projectPath}\\resources.json`, 'utf8'));
+    const resources = JSON.parse(this.fs.readFileSync(`${this.appDataPath}\\resources.json`, 'utf8'));
 
     for (let locale of locales) {
       let json: any = {};
@@ -151,7 +153,8 @@ export class GeneratorService {
         json[resource.id] = resource.translations.find((translation: any) => translation.locale === locale.id)?.value;
       }
       if (this.isElectron) {
-        const pathToResult = `${this.projectPath}\\${locale.id}.json`;
+        this.createBuildFolder();
+        const pathToResult = `${this.appBuildPath}\\${locale.id}.json`;
         this.fs.appendFileSync(pathToResult, JSON.stringify(json, null, 4));
       }
     }
@@ -159,9 +162,21 @@ export class GeneratorService {
 
   }
 
-  get projectPath(): string {
-    return localStorage.getItem('path') || '';
+  get appBuildPath(): string {
+    return localStorage.getItem('path') + '\\build';
   }
+
+  get appDataPath(): string {
+    return localStorage.getItem('path') + '\\AppData';
+  }
+
+  private createBuildFolder(): void {
+    const path = this.appBuildPath;
+    if (!this.fs.existsSync(path)) {
+      this.fs.mkdirSync(path);
+    }
+  }
+
 
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);

@@ -21,13 +21,15 @@ export class HomeComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     const dialogRef = this.dialog.open(DialogNewComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => { });
   }
 
 
   onClickOpen() {
-    this.electronService.openDialog()
+    this.electronService.showOpenDialog()
       .subscribe({
-        next: (result) => {this.router.navigate(['/container']); },
+        next: (result) => { this.router.navigate(['/container']); },
         error: (error) => { },
       });
   }

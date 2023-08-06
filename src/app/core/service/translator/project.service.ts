@@ -65,6 +65,13 @@ export class ProjectService {
     this.electronService.saveProjectToDisk(this.project);
   }
 
+  createProject(path: string, project: Project, resources: Resource[]): void {
+    this.electronService.saveProjectToDisk(project);
+    //create folder AppData
+    this.electronService.createFolder(path + '\\AppData');
+    this.electronService.saveResourcesToDisk(resources);
+  }
+
   getProject(): Project {
     this.project = this.electronService.getProjectFromDisk();
     return this.project;

@@ -75,15 +75,12 @@ export class ElectronService {
 
   saveResourcesToDisk = (data: Resource[]) => {
     if (this.isElectron) {
-      this.fs.writeFile(`${this.basePath}\\${RESOURCES}`,
+      this.fs.writeFileSync(`${this.appDataPath}\\${RESOURCES}`,
         JSON.stringify(data, null, 4),
         {
           encoding: "utf8",
           flag: "w",
           mode: 0o666
-        },
-        (err) => {
-          if (err) console.error(err);
         });
     }
   }
@@ -93,7 +90,7 @@ export class ElectronService {
     if (!this.basePath) return [];
 
     if (this.isElectron) {
-      let data = this.fs.readFileSync(`${this.basePath}\\${RESOURCES}`, 'utf8');
+      let data = this.fs.readFileSync(`${this.appDataPath}\\${RESOURCES}`, 'utf8');
       return JSON.parse(data);
     }
     return [];
@@ -103,17 +100,25 @@ export class ElectronService {
   saveProjectToDisk = (data: Project) => {
     if (!this.basePath) return;
     if (this.isElectron) {
-      this.fs.writeFile(`${this.basePath}\\${PROJECT}`,
+      this.fs.writeFileSync(`${this.basePath}\\${PROJECT}`,
         JSON.stringify(data, null, 4),
         {
           encoding: "utf8",
           flag: "w",
           mode: 0o666
-        },
-        (err) => {
-          if (err) console.error(err);
         });
     }
+  }
+
+  createFolder = (path: string) => {
+
+    if (this.isElectron) {
+      if (this.fs.existsSync(path)) {
+        return;
+      }
+      this.fs.mkdirSync(path, { recursive: true });
+    }
+
   }
 
   getProjectFromDisk = () => {
@@ -125,7 +130,7 @@ export class ElectronService {
     return {};
   }
 
-  openDialog = (): Observable<string> => {
+  showOpenDialog = (): Observable<string> => {
     if (this.isElectron) {
       const promise = this.ipcRenderer.invoke('showOpenDialog', {
         title: 'Select a file',
@@ -154,6 +159,37 @@ export class ElectronService {
         });
     }
     return this.subject;
+  }
+
+  showOpenDialogDirectory = (): Observable<string> => {
+    if (this.isElectron) {
+      const promise = this.ipcRenderer.invoke('showOpenDialog', {
+        title: 'Selccione una carpeta',
+        buttonLabel: 'Seleccionar carpeta',
+        properties: ['openDirectory']
+      });
+      promise
+        .then((result: any) => {
+          console.log(result);
+          if (result.canceled) {
+            this.subject.error('No se seleccionó ninguna carpeta');
+            localStorage.removeItem('path');
+          } else {
+            this.subject.next(result.filePaths[0]);
+            localStorage.setItem('path', result.filePaths[0]);
+          }
+        })
+        .catch((error: any) => {
+          console.error(error);
+          this.subject.error(error);
+        });
+    }
+    return this.subject;
+  }
+
+
+  get appDataPath(): string {
+    return this.basePath + '\\AppData';
   }
 
   get basePath(): string {
