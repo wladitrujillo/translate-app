@@ -8,7 +8,6 @@ import * as fs from 'fs';
 
 import { Resource } from '../../model/resource';
 import { Project } from '../../model/project';
-import { Locale } from '../../model/locale';
 
 const RESOURCES: string = "resources.json";
 const PROJECT: string = "project.json";

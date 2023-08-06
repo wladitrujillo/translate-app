@@ -6,14 +6,17 @@ import { Locale } from '@core/model/locale';
 import { Translation } from '@core/model/translation';
 
 let allLocales = [
+  { id: 'ES', name: 'Español' },
   { id: 'ES-EC', name: 'Español Ecuador' },
   { id: 'ES-PA', name: 'Español Panamá' },
-  { id: 'EN-US', name: 'English US' },
-  { id: 'EN-GB', name: 'English UK' },
-  { id: 'FR-FR', name: 'French France' },
-  { id: 'FR-CA', name: 'French Canada' },
-  { id: 'DE-DE', name: 'German Germany' },
   { id: 'ES-CO', name: 'Español Colombia' },
+  { id: 'ES-MX', name: 'Español México' },
+  { id: 'ES-ES', name: 'Español España' },
+  { id: 'EN', name: 'Inglés' },
+  { id: 'EN-US', name: 'Inglés US' },
+  { id: 'EN-GB', name: 'Inglés UK' },
+  { id: 'FR-FR', name: 'Frances France' },
+  { id: 'FR-CA', name: 'Frances Canada' },
 ]
 
 
@@ -48,7 +51,7 @@ export class ProjectService {
 
   removeLocaleFromAllResources(locale: Locale): void {
 
-    if(locale.id == this.project.baseLocale) {
+    if (locale.id == this.project.baseLocale) {
       throw new Error('No puede eliminar la cultura base');
     }
 

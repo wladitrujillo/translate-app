@@ -21,7 +21,7 @@
                 <mat-form-field class="col-md-12">
                     <mat-select placeholder="Idioma Base" formControlName="locale" #selectedLocale>
                         <mat-option *ngFor="let locale of locales" [value]="locale.value">
-                            {{locale.viewValue}}
+                            {{locale.name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -51,7 +51,7 @@
 
     </div>
     <div mat-dialog-actions>
-        <button mat-raised-button color="primary" (click)="onSubmit(selectedLocale.value)">Guardar</button>
+        <button mat-raised-button color="primary" (click)="onSubmit(selectedLocale.value)">Nuevo</button>
         <button mat-raised-button [mat-dialog-close]="'test'">Cancelar</button>
     </div>
 </form>

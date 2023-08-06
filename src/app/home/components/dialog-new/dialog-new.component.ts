@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Locale } from '@core/model/locale';
+import { ElectronService } from '@core/service/electron/electron.service';
+import { ProjectService } from '@core/service/translator/project.service';
 
 @Component({
   selector: 'app-dialog-new',
@@ -13,12 +15,18 @@ export class DialogNewComponent implements OnInit {
   //template variables
   selectedLocales: FormControl = new FormControl([]);
 
+  locales: Locale[] = [];
+
   constructor(
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private projectService: ProjectService) {
 
   }
 
   ngOnInit(): void {
+
+    this.locales = this.projectService.getAllLocales();
+
     this.newForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', []],
