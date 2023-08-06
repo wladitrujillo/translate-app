@@ -6,7 +6,7 @@ import { TranslatorRoutingModule } from './translator/translator.routing.module'
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'container',
     pathMatch: 'full'
   },
   {

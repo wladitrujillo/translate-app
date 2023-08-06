@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomeComponent } from './components/home/home.component';
+import { ContainerComponent } from './components/container/container.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { UploaderComponent } from './components/uploader/uploader.component';
 import { GeneratorComponent } from './components/generator/generator.component';
@@ -17,7 +17,7 @@ import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [
-    HomeComponent,
+    ContainerComponent,
     EditorComponent,
     UploaderComponent,
     GeneratorComponent,
