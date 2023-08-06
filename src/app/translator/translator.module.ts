@@ -5,7 +5,7 @@ import { EditorComponent } from './components/editor/editor.component';
 import { UploaderComponent } from './components/uploader/uploader.component';
 import { GeneratorComponent } from './components/generator/generator.component';
 import { SharedModule } from '../shared/shared.module';
-import { TranslatorRoutingModule } from './translator.routing.module';
+import { TranslatorRoutingModule } from './translator.routing';
 import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogAddCultureComponent } from './components/dialog-add-culture/dialog-add-culture.component';

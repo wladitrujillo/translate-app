@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { TranslatorModule } from './translator/translator.module';
+import { HomeModule } from '@home/home.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { TranslatorModule } from './translator/translator.module';
     BrowserAnimationsModule,
     CoreModule,
     SharedModule,
-    TranslatorModule
+    TranslatorModule,
+    HomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

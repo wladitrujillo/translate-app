@@ -1,0 +1,57 @@
+<form [formGroup]="newForm" (ngSubmit)="onSubmit()">
+
+    <h1 mat-dialog-title>
+        Nuevo Proyecto
+    </h1>
+    <div mat-dialog-content>
+
+        <div class="container">
+            <div class="row">
+                <mat-form-field class="col-md-12">
+                    <input matInput placeholder="Nombre" formControlName="name">
+                    <mat-error *ngIf="handleError('name', 'required')">
+                        Este campo es<strong> Requerido</strong>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-md-12">
+                    <input matInput placeholder="Descripción" formControlName="description">
+                </mat-form-field>
+
+                <mat-form-field class="col-md-12">
+                    <mat-select placeholder="Idioma Base" formControlName="locale" #selectedLocale>
+                        <mat-option *ngFor="let locale of locales" [value]="locale.value">
+                            {{locale.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                    <mat-label>Culturas</mat-label>
+                    <mat-select [compareWith]="compareCulture" multiple [formControl]="selectedLocales">
+                        <mat-select-trigger fxLayout="row wrap">
+                            <span *ngFor="let locale of selectedLocales.value; let last = last">
+                                {{locale.id}} {{last ? '' : ', '}}
+                            </span>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let locale of locales" [value]="locale">
+                            <ng-container [ngTemplateOutlet]="customTemplate"
+                                [ngTemplateOutletContext]="{locale:locale}">
+                            </ng-container>
+                        </mat-option>
+                        <ng-template #customTemplate let-locale="locale">
+                            {{locale.id}} {{locale.name}}
+                        </ng-template>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="onSubmit(selectedLocale.value)">Guardar</button>
+        <button mat-raised-button [mat-dialog-close]="'test'">Cancelar</button>
+    </div>
+</form>
