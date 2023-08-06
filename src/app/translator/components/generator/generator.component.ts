@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { Project } from '@core/model/project';
 import { GeneratorService } from '@core/service/electron/generator.service';
 import { ProjectService } from '@core/service/translator/project.service';
 import { NotificationService } from '@shared/service/notification.service';
@@ -19,6 +20,8 @@ export class GeneratorComponent implements OnInit {
 
   locales: Locale[] = [];
 
+  project!: Project | undefined;
+
   formats: { value: string, description: string }[] = [];
 
   constructor(
@@ -27,7 +30,8 @@ export class GeneratorComponent implements OnInit {
     private notification: NotificationService) { }
 
   ngOnInit(): void {
-    this.locales = this.projectService.getLocales();
+    this.project = this.projectService.getProject();
+    this.locales = this.project.locales;
     this.formats = [
       { value: 'mysql', description: 'MySQL (.sql)' },
       { value: 'sqlserver', description: 'SQL Server (.sql)' },

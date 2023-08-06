@@ -21,11 +21,8 @@ export class GeneratorService {
   path!: typeof path;
   format!: typeof format;
 
-  projectPath: string = "";
-
   constructor() {
 
-    this.projectPath = "C:\\electron\\data";
     // Conditional imports
     if (this.isElectron) {
       this.ipcRenderer = (window as any).require('electron').ipcRenderer;
@@ -160,6 +157,10 @@ export class GeneratorService {
     }
 
 
+  }
+
+  get projectPath(): string {
+    return localStorage.getItem('path') || '';
   }
 
   get isElectron(): boolean {

@@ -8,6 +8,7 @@ import * as fs from 'fs';
 
 import { Resource } from '../../model/resource';
 import { Project } from '../../model/project';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 const RESOURCES: string = "resources.json";
 const PROJECT: string = "project.json";
@@ -21,12 +22,10 @@ export class ElectronService {
   childProcess!: typeof childProcess;
   fs!: typeof fs;
 
-  projectPath: string = "";
-
+  subject = new BehaviorSubject<string>('');
 
   constructor() {
 
-    this.projectPath = "C:\\electron\\data";
 
     // Conditional imports
     if (this.isElectron) {
@@ -76,7 +75,7 @@ export class ElectronService {
 
   saveResourcesToDisk = (data: Resource[]) => {
     if (this.isElectron) {
-      this.fs.writeFile(`${this.projectPath}\\${RESOURCES}`,
+      this.fs.writeFile(`${this.basePath}\\${RESOURCES}`,
         JSON.stringify(data, null, 4),
         {
           encoding: "utf8",
@@ -90,8 +89,11 @@ export class ElectronService {
   }
 
   getResourcesFromDisk = () => {
+
+    if (!this.basePath) return [];
+
     if (this.isElectron) {
-      let data = this.fs.readFileSync(`${this.projectPath}\\${RESOURCES}`, 'utf8');
+      let data = this.fs.readFileSync(`${this.basePath}\\${RESOURCES}`, 'utf8');
       return JSON.parse(data);
     }
     return [];
@@ -99,8 +101,9 @@ export class ElectronService {
 
 
   saveProjectToDisk = (data: Project) => {
+    if (!this.basePath) return;
     if (this.isElectron) {
-      this.fs.writeFile(`${this.projectPath}\\${PROJECT}`,
+      this.fs.writeFile(`${this.basePath}\\${PROJECT}`,
         JSON.stringify(data, null, 4),
         {
           encoding: "utf8",
@@ -114,13 +117,48 @@ export class ElectronService {
   }
 
   getProjectFromDisk = () => {
+    if (!this.basePath) return {};
     if (this.isElectron) {
-      let data = this.fs.readFileSync(`${this.projectPath}\\${PROJECT}`, 'utf8');
+      let data = this.fs.readFileSync(`${this.basePath}\\${PROJECT}`, 'utf8');
       return JSON.parse(data);
     }
-    return [];
+    return {};
   }
 
+  openDialog = (): Observable<string> => {
+    if (this.isElectron) {
+      const promise = this.ipcRenderer.invoke('showOpenDialog', {
+        title: 'Select a file',
+        buttonLabel: 'Abrir',
+        filters: [
+          { name: 'Archivos', extensions: ['json'] },
+        ],
+        properties: ['openFile']
+      });
+      promise
+        .then((result: any) => {
+          console.log(result);
+          if (result.canceled) {
+            this.subject.error('No se seleccionó ningún archivo');
+            localStorage.removeItem('path');
+          } else {
+            //TO-DO: Validar que sea un archivo json and that contains the correct structure
+            const path = result.filePaths[0].split('\\').slice(0, -1).join('\\');
+            localStorage.setItem('path', path);
+            this.subject.next(result.filePaths[0]);
+          }
+        })
+        .catch((error: any) => {
+          console.error(error);
+          this.subject.error(error);
+        });
+    }
+    return this.subject;
+  }
+
+  get basePath(): string {
+    return localStorage.getItem('path') || '';
+  }
 
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);

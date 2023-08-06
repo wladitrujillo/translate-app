@@ -28,7 +28,6 @@ export class ProjectService {
   project: Project = {} as Project;
 
   constructor(private electronService: ElectronService) {
-    this.project = this.electronService.getProjectFromDisk();
   }
 
   addLocaleToAllResources(locale: Locale): void {
@@ -66,12 +65,8 @@ export class ProjectService {
     this.electronService.saveProjectToDisk(this.project);
   }
 
-  getBaseLocale(): Locale | undefined {
-    if (!this.project.locales) return undefined;
-    return this.project.locales.find((locale: Locale) => locale.id == this.project.baseLocale);
-  }
-
   getProject(): Project {
+    this.project = this.electronService.getProjectFromDisk();
     return this.project;
   }
 
@@ -80,14 +75,8 @@ export class ProjectService {
     this.electronService.saveProjectToDisk(project);
   }
 
-  getLocales(): Locale[] {
-    return this.project.locales;
-  }
-
   getAllLocales(): Locale[] {
     return allLocales;
   }
-
-
 
 }

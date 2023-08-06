@@ -1,7 +1,7 @@
 import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
-import { ipcMain } from 'electron';
+import { ipcMain, dialog } from 'electron';
 
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1),
@@ -21,6 +21,7 @@ function createWindow(): BrowserWindow {
             nodeIntegration: true,
             allowRunningInsecureContent: (serve),
             contextIsolation: false,
+            //preload: path.join(app.getAppPath(), "preload.js"),
         },
     });
 
@@ -30,6 +31,8 @@ function createWindow(): BrowserWindow {
 
         require('electron-reloader')(module);
         win.loadURL('http://localhost:4200');
+        // Open the DevTools.
+        //win.webContents.openDevTools();
     } else {
         // Path when running electron executable
         let pathIndex = './index.html';
@@ -59,6 +62,11 @@ try {
     ipcMain.handle('generateSql', (event, args) => {
         console.log('On App: ', event, args);
     });
+
+    ipcMain.handle('showOpenDialog', (event, params: any) => {
+       return dialog.showOpenDialog(params);
+    });
+
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.

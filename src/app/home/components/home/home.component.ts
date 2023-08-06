@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogNewComponent } from '../dialog-new/dialog-new.component';
+import { ElectronService } from '@core/service/electron/electron.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +11,10 @@ import { DialogNewComponent } from '../dialog-new/dialog-new.component';
 })
 export class HomeComponent {
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    private electronService: ElectronService) { }
 
   onClickNew() {
     const dialogConfig = new MatDialogConfig();
@@ -20,7 +25,11 @@ export class HomeComponent {
 
 
   onClickOpen() {
-
+    this.electronService.openDialog()
+      .subscribe({
+        next: (result) => {this.router.navigate(['/container']); },
+        error: (error) => { },
+      });
   }
 
 

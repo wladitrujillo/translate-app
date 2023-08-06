@@ -38,7 +38,7 @@ export class DialogAddResourceComponent implements OnInit {
       this.data.locales.forEach((locale: Locale) => {
         resource.translations.push({
           locale: locale.id,
-          value: locale.id == this.data.baseLocale.id ? this.form.value.value : `(${locale.id}) - ${this.form.value.value}`
+          value: this.form.value.value
         });
       });
       this.resourceService.addResource(resource);

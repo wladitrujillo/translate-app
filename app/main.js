@@ -18,6 +18,7 @@ function createWindow() {
             nodeIntegration: true,
             allowRunningInsecureContent: (serve),
             contextIsolation: false,
+            //preload: path.join(app.getAppPath(), "preload.js"),
         },
     });
     if (serve) {
@@ -25,6 +26,8 @@ function createWindow() {
         debug();
         require('electron-reloader')(module);
         win.loadURL('http://localhost:4200');
+        // Open the DevTools.
+        //win.webContents.openDevTools();
     }
     else {
         // Path when running electron executable
@@ -48,6 +51,9 @@ function createWindow() {
 try {
     electron_2.ipcMain.handle('generateSql', (event, args) => {
         console.log('On App: ', event, args);
+    });
+    electron_2.ipcMain.handle('showOpenDialog', (event, params) => {
+        return electron_2.dialog.showOpenDialog(params);
     });
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
