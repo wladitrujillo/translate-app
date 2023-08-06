@@ -11,6 +11,12 @@
       "@shared/*": [
         "src/app/shared/*"
       ],
+      "@home/*": [
+        "src/app/home/*"
+      ],
+      "@translator/*": [
+        "src/app/translator/*"
+      ],
     },
     "forceConsistentCasingInFileNames": true,
     "strict": true,
