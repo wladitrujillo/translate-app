@@ -8,7 +8,12 @@ import { Component } from '@angular/core';
 export class UploaderComponent {
 
   onFileSelected(event: any) {
-    console.log(event);
     console.log(event.target.files[0]);
+    let file: File = event.target.files[0];
+    let reader = new FileReader();
+    reader.onload = (e) => {
+      console.log(reader.result);
+    };
+    reader.readAsText(file);
   }
 }

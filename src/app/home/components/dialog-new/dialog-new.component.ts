@@ -79,7 +79,9 @@ export class DialogNewComponent implements OnInit {
         next: (result) => {
           this.newForm.controls['folder'].setValue(result);
         },
-        error: (error) => { },
+        error: (error) => {
+          console.error(error);
+         },
       });
   }
 
