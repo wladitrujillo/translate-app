@@ -20,7 +20,7 @@ export class GeneratorComponent implements OnInit {
 
   locales: Locale[] = [];
 
-  project!: Project | undefined;
+  project!: Project;
 
   formats: { value: string, description: string }[] = [];
 
@@ -42,7 +42,6 @@ export class GeneratorComponent implements OnInit {
   generate() {
 
     let locales: Locale[] = this.selectedLocales.value;
-
     if (locales.length == 0) {
       this.notification.warning('Debe seleccionar al menos una cultura');
       return;
@@ -51,11 +50,14 @@ export class GeneratorComponent implements OnInit {
     let fileFormat: string = this.fileFormat.value;
 
     if (fileFormat == 'mysql') {
-      this.generator.exportToMySql(locales);
+      this.generator.exportToMySql(locales, { id: this.project?.baseLocale || '', name: '' });
+      this.notification.success('Se ha generado los scripts SQL');
     } else if (fileFormat == 'sqlserver') {
-      this.generator.exportToSqlServer(locales);
+      this.notification.success('Se ha generado los scripts SQL');
+      this.generator.exportToSqlServer(locales, { id: this.project?.baseLocale || '', name: '' });
     } else if (fileFormat == 'json') {
       this.generator.exportToJson(locales);
+      this.notification.success('Se ha generado los archivos JSON');
     }
   }
 

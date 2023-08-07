@@ -57,35 +57,41 @@ export class GeneratorService {
     }
   }
 
-  private toMySql(resource: any, locales: string[]): string {
+  private toMySql(resource: any, locale: string, baseLocale: string): string {
 
-    let translations = resource
+    let baseTranslation = resource
       .translations
-      .filter((translation: any) => locales.includes(translation.locale));
+      .find((translation: any) => translation.locale == baseLocale);
+
+    let translation = resource
+      .translations
+      .find((translation: any) => translation.locale == locale);
 
 
-    if (translations.length === 0) {
+    if (!translation || !baseTranslation) {
       return '';
     }
 
-    let result =
-      `select @pc_id := pc_id 
+    let result = '';
+
+    if (baseTranslation.locale == translation.locale || baseTranslation.value != translation.value) {
+      result =
+        `select @pc_id := pc_id 
     from cobis.ad_pseudo_catalogo
     where pc_codigo_int = ${resource.id};`;
-    translations
-      .forEach((translation: { value: any; locale: any; }) => {
-        result +=
-          `update cobis.ad_recurso 
+
+      result +=
+        `update cobis.ad_recurso 
         set re_valor = '${translation.value}'
         where re_pc_id = @pc_id
         and re_cultura = '${translation.locale}';`;
-      });
+    }
 
     return result;
   }
 
 
-  private getScriptMySqlForLocales(procedureName: string, locales: any[]) {
+  private getScriptMySqlForLocales(procedureName: string, locale: string, baseLocale: string): string {
     let header = 'use cobis;\n';
     header += `DROP PROCEDURE IF EXISTS ${procedureName};\n`;
     header += 'DELIMITER //\n';
@@ -95,7 +101,7 @@ export class GeneratorService {
     const resources = JSON.parse(this.fs.readFileSync(`${this.appDataPath}\\resources.json`, 'utf8'));
     let body = '';
     resources.forEach((resource: any) => {
-      body += this.toMySql(resource, locales);
+      body += this.toMySql(resource, locale, baseLocale);
     });
 
     body = format(body,
@@ -114,26 +120,31 @@ export class GeneratorService {
     return header + body + footer;
   }
 
-  exportToMySql(locales: Locale[]): void {
+  exportToMySql(locales: Locale[], baseLocale: Locale): void {
 
     for (let locale of locales) {
+
       let sql = this.getScriptMySqlForLocales(`COBIS_mysql_${locale.id}`,
-        locales.map((locale: Locale) => locale.id));
+        locale.id, baseLocale.id);
 
       if (this.isElectron) {
         this.createBuildFolder();
-        const pathToResult = `${this.appBuildPath}\\COBIS_mysql_${locale.id}.sql`;
-        this.fs.appendFileSync(pathToResult, sql);
+        const filePath = `${this.appBuildPath}\\COBIS_mysql_${locale.id}.sql`;
+        if (this.fs.existsSync(filePath)) {
+          this.fs.unlinkSync(filePath);
+        }
+        this.fs.appendFileSync(filePath, sql);
       }
+
     }
 
 
   };
 
-  exportToSqlServer(locales: Locale[]): void {
+  exportToSqlServer(locales: Locale[], baseLocale: Locale): void {
     for (let locale of locales) {
       let sql = this.getScriptMySqlForLocales(`COBIS_sqlserver_${locale.id}`,
-        locales.map((locale: Locale) => locale.id));
+        locale.id, baseLocale.id);
 
       if (this.isElectron) {
         this.createBuildFolder();

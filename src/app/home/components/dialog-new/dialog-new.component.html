@@ -16,7 +16,7 @@
                         </div>
                         <input [readonly]="true" name="folder" matInput formControlName="folder" type="text"
                             class="form-control"
-                            [ngClass]="{'is-invalid': (wasSubmited && newForm.controls.folder.invalid)}"
+                            [ngClass]="{'is-invalid': (wasSubmited && newForm.controls['folder'].invalid)}"
                             aria-label="folder" aria-describedby="inputGroup-sizing-sm">
                         <div class="invalid-feedback" style="padding-left: 20px; font-size: 12px;">
                             Este campo es<strong> Requerido</strong>
