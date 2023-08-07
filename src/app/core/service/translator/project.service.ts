@@ -6,14 +6,17 @@ import { Locale } from '@core/model/locale';
 import { Translation } from '@core/model/translation';
 
 let allLocales = [
+  { id: 'ES', name: 'Español' },
   { id: 'ES-EC', name: 'Español Ecuador' },
   { id: 'ES-PA', name: 'Español Panamá' },
-  { id: 'EN-US', name: 'English US' },
-  { id: 'EN-GB', name: 'English UK' },
-  { id: 'FR-FR', name: 'French France' },
-  { id: 'FR-CA', name: 'French Canada' },
-  { id: 'DE-DE', name: 'German Germany' },
   { id: 'ES-CO', name: 'Español Colombia' },
+  { id: 'ES-MX', name: 'Español México' },
+  { id: 'ES-ES', name: 'Español España' },
+  { id: 'EN', name: 'Inglés' },
+  { id: 'EN-US', name: 'Inglés US' },
+  { id: 'EN-GB', name: 'Inglés UK' },
+  { id: 'FR-FR', name: 'Frances France' },
+  { id: 'FR-CA', name: 'Frances Canada' },
 ]
 
 
@@ -25,7 +28,6 @@ export class ProjectService {
   project: Project = {} as Project;
 
   constructor(private electronService: ElectronService) {
-    this.project = this.electronService.getProjectFromDisk();
   }
 
   addLocaleToAllResources(locale: Locale): void {
@@ -48,7 +50,7 @@ export class ProjectService {
 
   removeLocaleFromAllResources(locale: Locale): void {
 
-    if(locale.id == this.project.baseLocale) {
+    if (locale.id == this.project.baseLocale) {
       throw new Error('No puede eliminar la cultura base');
     }
 
@@ -63,12 +65,15 @@ export class ProjectService {
     this.electronService.saveProjectToDisk(this.project);
   }
 
-  getBaseLocale(): Locale | undefined {
-    if (!this.project.locales) return undefined;
-    return this.project.locales.find((locale: Locale) => locale.id == this.project.baseLocale);
+  createProject(path: string, project: Project, resources: Resource[]): void {
+    this.electronService.saveProjectToDisk(project);
+    //create folder AppData
+    this.electronService.createFolder(path + '\\AppData');
+    this.electronService.saveResourcesToDisk(resources);
   }
 
   getProject(): Project {
+    this.project = this.electronService.getProjectFromDisk();
     return this.project;
   }
 
@@ -77,14 +82,8 @@ export class ProjectService {
     this.electronService.saveProjectToDisk(project);
   }
 
-  getLocales(): Locale[] {
-    return this.project.locales;
-  }
-
   getAllLocales(): Locale[] {
     return allLocales;
   }
-
-
 
 }

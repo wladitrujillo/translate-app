@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomeComponent } from './components/home/home.component';
+import { ContainerComponent } from './components/container/container.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { UploaderComponent } from './components/uploader/uploader.component';
 import { GeneratorComponent } from './components/generator/generator.component';
 import { SharedModule } from '../shared/shared.module';
-import { TranslatorRoutingModule } from './translator.routing.module';
+import { TranslatorRoutingModule } from './translator.routing';
 import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogAddCultureComponent } from './components/dialog-add-culture/dialog-add-culture.component';
@@ -17,7 +17,7 @@ import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [
-    HomeComponent,
+    ContainerComponent,
     EditorComponent,
     UploaderComponent,
     GeneratorComponent,

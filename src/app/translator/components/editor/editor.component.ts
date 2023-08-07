@@ -9,6 +9,7 @@ import { DialogAddResourceComponent } from '../dialog-add-resource/dialog-add-re
 import { DialogConfirmRemoveComponent } from 'src/app/shared/components/dialog-confirm-remove/dialog-confirm-remove.component';
 import { ResourceService } from '@core/service/translator/resource.service';
 import { ProjectService } from '@core/service/translator/project.service';
+import { Project } from '@core/model/project';
 
 @Component({
   selector: 'app-editor',
@@ -26,6 +27,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   //template variables
   selectedLocales: FormControl = new FormControl([]);
   selectedTranslation: Translation | null = null;
+  project!: Project | undefined;
   resources: Resource[] = [];
 
 
@@ -51,9 +53,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
-    this.loadData();
-    this.locales = this.projectService.getLocales();
-    this.baseLocale = this.projectService.getBaseLocale();
+
+    this.project = this.projectService.getProject();
+    this.locales = this.project?.locales;
+    this.baseLocale = this.project?.locales?.find((locale: Locale) => locale.id == this.project?.baseLocale);
     this.resources = this.resourceService.getResources();
     this.selectedLocales.setValue([this.baseLocale]);
 
@@ -83,7 +86,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.data = {locales: this.locales, baseLocale: this.baseLocale}
+    dialogConfig.data = { locales: this.locales, baseLocale: this.baseLocale }
 
     const dialogRef = this.dialog
       .open(DialogAddResourceComponent, dialogConfig);
@@ -131,8 +134,5 @@ export class EditorComponent implements OnInit, AfterViewInit {
       locale1.id === locale2.id : locale1 === locale2;
   }
 
-  private loadData(): void {
-
-  }
 
 }

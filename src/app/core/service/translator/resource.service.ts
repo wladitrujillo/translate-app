@@ -11,7 +11,6 @@ export class ResourceService {
   resources: Resource[] = [];
 
   constructor(private electronService: ElectronService) {
-    this.resources = this.electronService.getResourcesFromDisk();
   }
 
 

@@ -1,0 +1,79 @@
+<form [formGroup]="newForm" (ngSubmit)="onSubmitCreateProject()">
+
+    <h1 mat-dialog-title>
+        Nuevo Proyecto
+    </h1>
+    <div mat-dialog-content>
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="input-group has-validation input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <button (click)="onSelectFolder($event)" class="input-group-text"
+                                id="inputGroup-sizing-sm">Seleccionar Carpeta</button>
+                        </div>
+                        <input [readonly]="true" name="folder" matInput formControlName="folder" type="text"
+                            class="form-control"
+                            [ngClass]="{'is-invalid': (wasSubmited && newForm.controls['folder'].invalid)}"
+                            aria-label="folder" aria-describedby="inputGroup-sizing-sm">
+                        <div class="invalid-feedback" style="padding-left: 20px; font-size: 12px;">
+                            Este campo es<strong> Requerido</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <mat-form-field class="col-md-12">
+                    <input matInput placeholder="Nombre" formControlName="name">
+                    <mat-error *ngIf="handleError('name', 'required')">
+                        Este campo es<strong> Requerido</strong>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-md-12">
+                    <input matInput placeholder="Descripción" formControlName="description">
+                </mat-form-field>
+
+                <mat-form-field class="col-md-12">
+                    <mat-label>Cultura Base</mat-label>
+                    <mat-select placeholder="Seleccione" formControlName="baseLocale"
+                        (selectionChange)="baseLocaleChangeAction($event)">
+                        <mat-option *ngFor="let locale of allLocales" [value]="locale.id">
+                            {{locale.name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="handleError('baseLocale', 'required')">
+                        Este campo es<strong> Requerido</strong>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                    <mat-label>Culturas</mat-label>
+                    <mat-select [compareWith]="compareCulture" multiple [formControl]="selectedLocales">
+                        <mat-select-trigger fxLayout="row wrap">
+                            <span *ngFor="let locale of selectedLocales.value; let last = last">
+                                {{locale.id}} {{last ? '' : ', '}}
+                            </span>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let locale of tarjetLocales" [value]="locale">
+                            <ng-container [ngTemplateOutlet]="customTemplate"
+                                [ngTemplateOutletContext]="{locale:locale}">
+                            </ng-container>
+                        </mat-option>
+                        <ng-template #customTemplate let-locale="locale">
+                            {{locale.id}} {{locale.name}}
+                        </ng-template>
+                    </mat-select>
+                    <mat-error *ngIf="true">
+                        Este campo es<strong> Requerido</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button color="primary" type="submit">Crear</button>
+        <button mat-raised-button [mat-dialog-close]="'test'">Cancelar</button>
+    </div>
+</form>
