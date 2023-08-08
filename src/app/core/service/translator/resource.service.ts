@@ -35,9 +35,9 @@ export class ResourceService {
     }
     return this.resources
       .filter((resource) => {
-        return resource.id.includes(text) ||
-          resource.translations.some((translation) => {
-            return translation.value.includes(text);
+        return resource.id?.includes(text) ||
+          resource.translations?.some((translation) => {
+            return translation.value?.includes(text);
           });
       });
   }

@@ -80,6 +80,9 @@ export class UploaderService {
     for (let row of rows) {
 
       let resource = csvRowToResource(row, rowFileModel, locale);
+
+      if(!resource.id) continue;
+
       let resourceIndex = resources.findIndex(r => r.id == resource.id);
 
       if (resourceIndex == -1) {
