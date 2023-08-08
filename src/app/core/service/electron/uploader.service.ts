@@ -66,7 +66,7 @@ export class UploaderService {
       resource.translations = [];
 
       resource.id = row[rowFileModel.key];
-      resource.translations.push({ locale: locale.id, value: row[rowFileModel.value] });
+      resource.translations.push({ locale: locale.id, value: row[rowFileModel.translation] });
 
       return resource;
     }
@@ -96,6 +96,7 @@ export class UploaderService {
   }
 
   private newResource(resources: Resource[], resource: Resource, project: Project) {
+    let isBaseLocale: boolean = resource.translations[0].locale == project.baseLocale;
     let newResource = {} as Resource;
     newResource.id = resource.id;
     newResource.translations = [];
@@ -103,7 +104,7 @@ export class UploaderService {
       if (locale.id == resource.translations[0].locale) {
         newResource.translations.push(resource.translations[0]);
       } else {
-        newResource.translations.push({ locale: locale.id, value: '' });
+        newResource.translations.push({ locale: locale.id, value: isBaseLocale ? resource.translations[0].value : '' });
       }
     }
     resources.push(newResource);

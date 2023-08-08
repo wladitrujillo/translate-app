@@ -3,6 +3,8 @@
         <div class="col-md-12">
             <input type="file" accept=".csv" class="file-upload" (change)="onFileSelected($event)">
         </div>
-
+        <div class="col-md-12" style="margin-top: 20px;">
+            <button *ngIf="isProcessFileAvailable" mat-raised-button color="primary" (click)="onProcessFile()">Procesar Archivo</button>
+        </div>
     </div>
 </div>
