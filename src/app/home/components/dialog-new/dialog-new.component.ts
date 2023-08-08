@@ -30,8 +30,7 @@ export class DialogNewComponent implements OnInit {
     private matDialogRef: MatDialogRef<DialogNewComponent>,
     private formBuilder: FormBuilder,
     private projectService: ProjectService,
-    private electronService: ElectronService,
-    private router: Router) {
+    private electronService: ElectronService) {
 
   }
 
@@ -60,8 +59,7 @@ export class DialogNewComponent implements OnInit {
     project.locales = this.selectedLocales.value;
     project.locales.unshift(this.allLocales.find((locale: Locale) => locale.id == project.baseLocale) as Locale);
     this.projectService.createProject(this.newForm.controls['folder'].value, project, []);
-    this.matDialogRef.close();
-    this.router.navigate(['/container']);
+    this.matDialogRef.close(true);
 
   }
 
