@@ -1,0 +1,49 @@
+<form (ngSubmit)="onSubmitAddResource()">
+    <h1 mat-dialog-title>
+        Procesar Archivo
+    </h1>
+    <div mat-dialog-content>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="d-flex flex-row">
+                        <div style="margin-right: 5px;" *ngFor="let value of values; let index = index">
+                            <mat-form-field style="width: 100%;">
+                                <mat-label>Columna {{index}}</mat-label>
+                                <mat-select>
+                                    <mat-option value="">Seleccione</mat-option>
+                                    <mat-option *ngFor="let item of rowKeys" [value]="item.code">
+                                        {{item.description}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field style="width: 100%;">
+                                <mat-label>Columna {{index}}</mat-label>
+                                <textarea matInput placeholder="Texto" [value]="value"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field style="width: 100%;">
+                        <mat-label>Cultura</mat-label>
+                        <mat-select [formControl]="selectedLocale">
+                            <mat-option *ngFor="let locale of locales" [value]="locale.id">
+                                {{locale.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button color="primary" type="submit">Procesar</button>
+        <button mat-raised-button [mat-dialog-close]="false">Cancelar</button>
+    </div>
+</form>
