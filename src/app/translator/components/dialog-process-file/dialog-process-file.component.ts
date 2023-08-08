@@ -13,14 +13,14 @@ export class DialogProcessFileComponent implements OnInit {
 
   locales: Locale[] = [];
   columns: string[] = [];
-  rowKeys: any = {};
+  rowKeys: any = { 0: 'key', 1: 'translation' };
 
   rowOptions: any[] = [
     { code: 'key', description: "Clave Principal" },
     { code: 'translation', description: "Traducción" },
   ];
 
-  selectedLocale: FormControl = new FormControl('', [Validators.required]);
+  selectedLocale: FormControl = new FormControl({}, [Validators.required]);
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
@@ -31,8 +31,13 @@ export class DialogProcessFileComponent implements OnInit {
   ngOnInit(): void {
     this.locales = this.data.locales;
     this.columns = this.data.row.split(',');
+    this.selectedLocale.setValue(this.locales[0]);
   }
 
+  compareLocales(locale1: Locale, locale2: Locale): boolean {
+    return locale1 && locale2 ?
+      locale1.id === locale2.id : locale1 === locale2;
+  }
 
   onSubmitProcessFile(): void {
 
