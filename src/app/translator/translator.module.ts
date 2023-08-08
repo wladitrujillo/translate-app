@@ -12,6 +12,7 @@ import { DialogAddCultureComponent } from './components/dialog-add-culture/dialo
 import { DialogAddResourceComponent } from './components/dialog-add-resource/dialog-add-resource.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { CoreModule } from '../core/core.module';
+import { DialogProcessFileComponent } from './components/dialog-process-file/dialog-process-file.component';
 
 
 
@@ -23,7 +24,8 @@ import { CoreModule } from '../core/core.module';
     GeneratorComponent,
     DialogAddCultureComponent,
     DialogAddResourceComponent,
-    SettingsComponent
+    SettingsComponent,
+    DialogProcessFileComponent
   ],
   imports: [
     CommonModule,

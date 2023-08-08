@@ -14,7 +14,7 @@
                             <button (click)="onSelectFolder($event)" class="input-group-text"
                                 id="inputGroup-sizing-sm">Seleccionar Carpeta</button>
                         </div>
-                        <input [readonly]="true" name="folder" matInput formControlName="folder" type="text"
+                        <input [readonly]="true" style="box-shadow: none;" matInput formControlName="folder" type="text"
                             class="form-control"
                             [ngClass]="{'is-invalid': (wasSubmited && newForm.controls['folder'].invalid)}"
                             aria-label="folder" aria-describedby="inputGroup-sizing-sm">
