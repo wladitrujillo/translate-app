@@ -36,4 +36,4 @@ Run `npm run web:build` to build the project. The build artifacts will be stored
 
 ## Build electron app
 
-Run `npm run electron:build` to build the electron app. The build artifacts will be stored in `realse/` directory.
+Run `npm run electron:build` to build the electron app. The build artifacts will be stored in `release/` directory.
