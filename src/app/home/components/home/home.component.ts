@@ -22,7 +22,12 @@ export class HomeComponent {
     dialogConfig.autoFocus = true;
     const dialogRef = this.dialog.open(DialogNewComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe(result => { });
+    dialogRef
+      .afterClosed()
+      .subscribe(result => {
+        if (!result) return;
+        this.router.navigate(['/container']);
+      });
   }
 
 

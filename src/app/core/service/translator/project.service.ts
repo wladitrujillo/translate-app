@@ -12,6 +12,8 @@ let allLocales = [
   { id: 'ES-CO', name: 'Español Colombia' },
   { id: 'ES-MX', name: 'Español México' },
   { id: 'ES-ES', name: 'Español España' },
+  { id: 'ES-BO', name: 'Español Bolivia' },
+  { id: 'ES-AR', name: 'Español Argentina' },
   { id: 'EN', name: 'Inglés' },
   { id: 'EN-US', name: 'Inglés US' },
   { id: 'EN-GB', name: 'Inglés UK' },
