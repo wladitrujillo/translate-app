@@ -8,7 +8,7 @@ import * as fs from 'fs';
 
 import { Resource } from '../../model/resource';
 import { Project } from '../../model/project';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 
 const RESOURCES: string = "resources.json";
 const PROJECT: string = "project.json";
@@ -22,7 +22,7 @@ export class ElectronService {
   childProcess!: typeof childProcess;
   fs!: typeof fs;
 
-  subject = new BehaviorSubject<string>('');
+  subject = new Subject<string>();
 
   constructor() {
 
@@ -144,7 +144,6 @@ export class ElectronService {
         .then((result: any) => {
           console.log(result);
           if (result.canceled) {
-            this.subject.error('No se seleccionó ningún archivo');
             localStorage.removeItem('path');
           } else {
             //TO-DO: Validar que sea un archivo json and that contains the correct structure
@@ -172,7 +171,6 @@ export class ElectronService {
         .then((result: any) => {
           console.log(result);
           if (result.canceled) {
-            this.subject.error('No se seleccionó ninguna carpeta');
             localStorage.removeItem('path');
           } else {
             this.subject.next(result.filePaths[0]);

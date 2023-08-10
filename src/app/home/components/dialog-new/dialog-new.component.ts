@@ -69,8 +69,6 @@ export class DialogNewComponent implements OnInit {
   }
 
   onSelectFolder(event: any): void {
-    event.stopPropagation();
-    event.preventDefault();
 
     this.electronService.showOpenDialogDirectory()
       .subscribe({

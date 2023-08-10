@@ -34,8 +34,12 @@ export class HomeComponent {
   onClickOpen() {
     this.electronService.showOpenDialog()
       .subscribe({
-        next: (result) => { this.router.navigate(['/container']); },
-        error: (error) => { },
+        next: (result) => {
+          this.router.navigate(['/container']);
+        },
+        error: (error) => {
+          console.log(error);
+        },
       });
   }
 
