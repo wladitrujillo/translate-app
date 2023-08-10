@@ -66,7 +66,7 @@ export class UploaderService {
       resource.translations = [];
 
       resource.id = row[rowFileModel.key];
-      resource.translations.push({ locale: locale.id, value: row[rowFileModel.translation] });
+      resource.translations.push({ locale: locale.id, value: row[rowFileModel.translation]?.trim() });
 
       return resource;
     }
@@ -81,7 +81,7 @@ export class UploaderService {
 
       let resource = csvRowToResource(row, rowFileModel, locale);
 
-      if(!resource.id) continue;
+      if (!resource.id) continue;
 
       let resourceIndex = resources.findIndex(r => r.id == resource.id);
 
