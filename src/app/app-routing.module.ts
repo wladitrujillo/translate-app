@@ -1,14 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
-import { TranslatorRoutingModule } from './translator/translator.routing';
-import { HomeRoutingModule } from './home/home.routing';
 
 const routes: Routes = [
   {
-    path: '',
+    path:'',
     redirectTo: 'home',
     pathMatch: 'full'
+  },
+  {
+    path:'home',
+    loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
+  },
+  {
+    path:'translator',
+    loadChildren: () => import('./translator/translator.module').then(m => m.TranslatorModule)
   },
   {
     path: '**',
@@ -18,9 +24,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes),
-    HomeRoutingModule,
-    TranslatorRoutingModule,
+    RouterModule.forRoot(routes)
   ],
   exports: [RouterModule]
 })

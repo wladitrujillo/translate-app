@@ -29,10 +29,10 @@ import { DialogProcessFileComponent } from './components/dialog-process-file/dia
   ],
   imports: [
     CommonModule,
+    TranslatorRoutingModule,
     MaterialModule,
     CoreModule,
     SharedModule,
-    TranslatorRoutingModule,
     ReactiveFormsModule
   ],
   exports: [

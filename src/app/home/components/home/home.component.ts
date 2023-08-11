@@ -26,7 +26,7 @@ export class HomeComponent {
       .afterClosed()
       .subscribe(result => {
         if (!result) return;
-        this.router.navigate(['/container']);
+        this.router.navigate(['/translator']);
       });
   }
 
@@ -35,7 +35,7 @@ export class HomeComponent {
     this.electronService.showOpenDialog()
       .subscribe({
         next: (result) => {
-          this.router.navigate(['/container']);
+          this.router.navigate(['/translator']);
         },
         error: (error) => {
           console.log(error);
