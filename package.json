@@ -6,7 +6,7 @@
     "email": "wladimir.trujillo.ec@gmail.com"
   },
   "version": "1.0.0",
-  "main": "app/main.js",
+  "main": "electron-dist/main.js",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "ng": "ng",
