@@ -9,6 +9,7 @@ import * as path from 'path';
 import { format } from 'sql-formatter';
 
 import { Locale } from '@core/model/locale';
+import { Constants } from '@core/service/electron/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +58,7 @@ export class GeneratorService {
     }
   }
 
-  private toMySql(resource: any, locale: string, baseLocale: string): string {
+  private toErrorsMySql(resource: any, locale: string, baseLocale: string): string {
 
     let baseTranslation = resource
       .translations
@@ -97,7 +98,7 @@ export class GeneratorService {
   }
 
 
-  private getScriptMySqlForLocales(procedureName: string, locale: string, baseLocale: string): string {
+  private getScriptErrorsMySqlForLocales(procedureName: string, locale: string, baseLocale: string): string {
 
     let header = 'use cobis;\n';
     let cleanProcedureName = procedureName.replace(/-/g, '_');
@@ -106,10 +107,10 @@ export class GeneratorService {
     header += `CREATE PROCEDURE ${cleanProcedureName}()\n`;
     header += 'BEGIN\n';
 
-    const resources = JSON.parse(this.fs.readFileSync(`${this.appDataPath}\\resources.json`, 'utf8'));
+    const resources = JSON.parse(this.fs.readFileSync(`${this.appDataPath}\\${Constants.RESOURCES_FILE_NAME}`, 'utf8'));
     let body = '';
     resources.forEach((resource: any) => {
-      body += this.toMySql(resource, locale, baseLocale);
+      body += this.toErrorsMySql(resource, locale, baseLocale);
     });
 
     body = format(body,
@@ -128,16 +129,16 @@ export class GeneratorService {
     return header + body + footer;
   }
 
-  exportToMySql(locales: Locale[], baseLocale: Locale): void {
+  exportToErrorsMySql(locales: Locale[], baseLocale: Locale): void {
 
     for (let locale of locales) {
 
-      let sql = this.getScriptMySqlForLocales(`COBIS_mysql_${locale.id}`,
+      let sql = this.getScriptErrorsMySqlForLocales(`COBIS_errors_mysql_${locale.id}`,
         locale.id, baseLocale.id);
 
       if (this.isElectron) {
         this.createBuildFolder();
-        const filePath = `${this.appBuildPath}\\COBIS_mysql_${locale.id}.sql`;
+        const filePath = `${this.appBuildPath}\\COBIS_errors_mysql_${locale.id}.sql`;
         if (this.fs.existsSync(filePath)) {
           this.fs.unlinkSync(filePath);
         }
@@ -149,10 +150,20 @@ export class GeneratorService {
 
   };
 
-  exportToSqlServer(locales: Locale[], baseLocale: Locale): void {
+  exportToCatalogMySql(locales: Locale[], baseLocale: Locale): void {
     for (let locale of locales) {
-      let sql = this.getScriptMySqlForLocales(`COBIS_sqlserver_${locale.id}`,
-        locale.id, baseLocale.id);
+      let sql = '';
+      if (this.isElectron) {
+        this.createBuildFolder();
+        const pathToResult = `${this.appBuildPath}\\COBIS_sqlserver_${locale.id}.sql`;
+        this.fs.appendFileSync(pathToResult, sql);
+      }
+    }
+  };
+
+  exportToTransactionMySql(locales: Locale[], baseLocale: Locale): void {
+    for (let locale of locales) {
+      let sql = '';
 
       if (this.isElectron) {
         this.createBuildFolder();
@@ -164,7 +175,7 @@ export class GeneratorService {
 
   exportToJson(locales: Locale[]): void {
 
-    const resources = JSON.parse(this.fs.readFileSync(`${this.appDataPath}\\resources.json`, 'utf8'));
+    const resources = JSON.parse(this.fs.readFileSync(`${this.appDataPath}\\${Constants.RESOURCES_FILE_NAME}`, 'utf8'));
 
     for (let locale of locales) {
       let json: any = {};
@@ -178,6 +189,29 @@ export class GeneratorService {
       }
     }
 
+
+  }
+
+
+  exportToMenuJS(locales: Locale[]): void {
+
+    const resources = JSON.parse(this.fs.readFileSync(`${this.appDataPath}\\${Constants.RESOURCES_FILE_NAME}`, 'utf8'));
+
+    for (let locale of locales) {
+      let menu: any = {
+        "COMMONS": {
+          "MENU": {}
+        }
+      };
+      for (let resource of resources) {
+        menu.commons.menu[resource.id] = resource.translations.find((translation: any) => translation.locale === locale.id)?.value;
+      }
+      if (this.isElectron) {
+        this.createBuildFolder();
+        const pathToResult = `${this.appBuildPath}\\${locale.id}.js`;
+        this.fs.appendFileSync(pathToResult, JSON.stringify(menu, null, 4));
+      }
+    }
 
   }
 

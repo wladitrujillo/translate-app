@@ -15,7 +15,7 @@ import { Locale } from 'src/app/core/model/locale';
 export class GeneratorComponent implements OnInit {
 
   panelOpenState = false;
-  fileFormat: FormControl = new FormControl('mysql');
+  fileFormat: FormControl = new FormControl('');
   selectedLocales: FormControl = new FormControl([]);
 
   locales: Locale[] = [];
@@ -33,8 +33,10 @@ export class GeneratorComponent implements OnInit {
     this.project = this.projectService.getProject();
     this.locales = this.project.locales;
     this.formats = [
-      { value: 'mysql', description: 'MySQL (.sql)' },
-      { value: 'sqlserver', description: 'SQL Server (.sql)' },
+      { value: 'mysql-errors', description: 'MySQL (.sql) errores' },
+      { value: 'mysql-catalogs', description: 'MySQL (.sql) catalogos' },
+      { value: 'mysql-trn', description: 'MySQL (.sql) transacciones' },
+      { value: 'menu', description: 'Menu (.js)' },
       { value: 'json', description: 'Json (.json)' },
     ]
   }
@@ -49,16 +51,30 @@ export class GeneratorComponent implements OnInit {
 
     let fileFormat: string = this.fileFormat.value;
 
-    if (fileFormat == 'mysql') {
-      this.generator.exportToMySql(locales, { id: this.project?.baseLocale || '', name: '' });
-      this.notification.success('Se ha generado los scripts SQL');
-    } else if (fileFormat == 'sqlserver') {
-      this.notification.success('Se ha generado los scripts SQL');
-      this.generator.exportToSqlServer(locales, { id: this.project?.baseLocale || '', name: '' });
-    } else if (fileFormat == 'json') {
-      this.generator.exportToJson(locales);
-      this.notification.success('Se ha generado los archivos JSON');
+    switch (fileFormat) {
+      case 'mysql-errors':
+        this.generator.exportToErrorsMySql(locales, { id: this.project?.baseLocale || '', name: '' });
+        this.notification.success('Se ha generado los scripts SQL');
+        break;
+      case 'mysql-catalogs':
+        this.generator.exportToCatalogMySql(locales, { id: this.project?.baseLocale || '', name: '' });
+        this.notification.success('Se ha generado los scripts SQL');
+        break;
+      case 'mysql-trn':
+        this.generator.exportToTransactionMySql(locales, { id: this.project?.baseLocale || '', name: '' });
+        this.notification.success('Se ha generado los scripts SQL');
+        break;
+      case 'menu':
+        this.generator.exportToMenuJS(locales);
+        this.notification.success('Se ha generado los archivos de Menu JS');
+        break;
+      case 'json':
+        this.generator.exportToJson(locales);
+        this.notification.success('Se ha generado los archivos JSON');
+        break;
+      default:
     }
+
   }
 
   compareLocales(locale1: Locale, locale2: Locale): boolean {

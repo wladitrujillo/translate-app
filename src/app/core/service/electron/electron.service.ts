@@ -9,9 +9,8 @@ import * as fs from 'fs';
 import { Resource } from '../../model/resource';
 import { Project } from '../../model/project';
 import { Observable, Subject, of } from 'rxjs';
+import { Constants } from '@core/service/electron/constants';
 
-const RESOURCES: string = "resources.json";
-const PROJECT: string = "project.json";
 @Injectable({
   providedIn: 'root'
 })
@@ -75,7 +74,7 @@ export class ElectronService {
 
   saveResourcesToDisk = (data: Resource[]) => {
     if (this.isElectron) {
-      this.fs.writeFileSync(`${this.appDataPath}\\${RESOURCES}`,
+      this.fs.writeFileSync(`${this.appDataPath}\\${Constants.RESOURCES_FILE_NAME}`,
         JSON.stringify(data, null, 4),
         {
           encoding: "utf8",
@@ -90,7 +89,7 @@ export class ElectronService {
     if (!this.basePath) return [];
 
     if (this.isElectron) {
-      let data = this.fs.readFileSync(`${this.appDataPath}\\${RESOURCES}`, 'utf8');
+      let data = this.fs.readFileSync(`${this.appDataPath}\\${Constants.RESOURCES_FILE_NAME}`, 'utf8');
       return JSON.parse(data);
     }
     return [];
@@ -100,7 +99,7 @@ export class ElectronService {
   saveProjectToDisk = (data: Project) => {
     if (!this.basePath) return;
     if (this.isElectron) {
-      this.fs.writeFileSync(`${this.basePath}\\${PROJECT}`,
+      this.fs.writeFileSync(`${this.basePath}\\${Constants.PROJECT_FILE_NAME}`,
         JSON.stringify(data, null, 4),
         {
           encoding: "utf8",
@@ -124,7 +123,7 @@ export class ElectronService {
   getProjectFromDisk = () => {
     if (!this.basePath) return {};
     if (this.isElectron) {
-      let data = this.fs.readFileSync(`${this.basePath}\\${PROJECT}`, 'utf8');
+      let data = this.fs.readFileSync(`${this.basePath}\\${Constants.PROJECT_FILE_NAME}`, 'utf8');
       return JSON.parse(data);
     }
     return {};
