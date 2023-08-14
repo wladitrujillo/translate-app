@@ -1,13 +1,8 @@
 
 import { Locale } from '../model/locale';
-import { Resource } from '../model/resource';
-import { Translation } from '../model/translation';
 import * as fs from 'fs';
-import * as path from 'path';
 import { format } from 'sql-formatter';
 
-const RESOURCES = 'resources.json';
-const PROJECT = 'project.json';
 
 
 export class GeneratorErrrors {

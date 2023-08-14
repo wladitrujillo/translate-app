@@ -1,4 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
+import { ProjectSrv } from "./services/project.srv"
+import { ResourceSrv } from "./services/resource.srv";
 
 // It has the same sandbox as a Chrome extension.
 window.addEventListener("DOMContentLoaded", () => {
@@ -28,11 +30,19 @@ export const RendererApi = {
         return ipcRenderer.invoke("getAppMetrics");
     },
 
-    openDialog: (config: any): void => {
-        ipcRenderer.invoke('showOpenDialog', config);
+    showOpenDialog: (config: any): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.invoke('showOpenDialog', config)
+                .then((result: any) => {
+                    resolve(result);
+                }).catch((error: any) => {
+                    reject(error);
+                });
+        });
     }
 };
 
 // SECURITY: expose a limted API to the renderer over the context bridge
 // https://github.com/1password/electron-secure-defaults/SECURITY.md#rule-3
 contextBridge.exposeInMainWorld("api", RendererApi);
+contextBridge.exposeInMainWorld("projectApi", new ProjectSrv(new ResourceSrv()));

@@ -2,10 +2,13 @@ import { RowFileModel } from "@core/model/row-file-model";
 import { Locale } from "../model/locale";
 import { Project } from "../model/project";
 import { Resource } from "../model/resource";
+import { ResourceSrv } from "./resource.srv";
+import { ProjectSrv } from "./project.srv";
 
 export class UploaderCsv {
 
-    constructor() {
+
+    constructor(private projectSrv: ProjectSrv, private resourceSrv: ResourceSrv) {
         console.log('UploaderCsv constructor');
     }
 
@@ -26,9 +29,9 @@ export class UploaderCsv {
 
         let rows = content.split('\n');
 
-        let resources: Resource[] = this.electronService.getResourcesFromDisk();
+        let resources: Resource[] = this.resourceSrv.getResourcesFromDisk();
 
-        let project: Project = this.electronService.getProjectFromDisk();
+        let project: Project = this.projectSrv.getProjectFromDisk();
 
         for (let row of rows) {
 
@@ -47,7 +50,7 @@ export class UploaderCsv {
 
         }
 
-        this.electronService.saveResourcesToDisk(resources);
+        this.resourceSrv.saveResourcesToDisk(resources);
 
     }
 
