@@ -3,7 +3,6 @@ import { Project } from '@core/model/project';
 import { ElectronService } from '../electron/electron.service';
 import { Resource } from '@core/model/resource';
 import { Locale } from '@core/model/locale';
-import { Translation } from '@core/model/translation';
 
 let allLocales = [
   { id: 'ES', name: 'Español' },
@@ -27,60 +26,27 @@ let allLocales = [
 })
 export class ProjectService {
 
-  project: Project = {} as Project;
 
   constructor(private electronService: ElectronService) {
   }
 
   addLocaleToAllResources(locale: Locale): void {
-
-    let resources = this.electronService.getResourcesFromDisk();
-
-    resources.forEach((resource: Resource) => {
-      let baseTranslation = resource.translations
-        .find((t: Translation) =>
-          t.locale == this.project.baseLocale);
-      resource.translations.push({
-        locale: locale.id,
-        value: baseTranslation?.value || ''
-      });
-    });
-    this.project.locales.push(locale);
-    this.electronService.saveResourcesToDisk(resources);
-    this.electronService.saveProjectToDisk(this.project);
+    this.electronService.addLocaleToAllResources(locale);
   }
 
   removeLocaleFromAllResources(locale: Locale): void {
-
-    if (locale.id == this.project.baseLocale) {
-      throw new Error('No puede eliminar la cultura base');
-    }
-
-    let resources = this.electronService.getResourcesFromDisk();
-    resources.forEach((resource: Resource) => {
-      let index = resource.translations.findIndex((t: Translation) => t.locale == locale.id);
-      resource.translations.splice(index, 1);
-    });
-    let index = this.project.locales.findIndex((l: Locale) => l.id == locale.id);
-    this.project.locales.splice(index, 1);
-    this.electronService.saveResourcesToDisk(resources);
-    this.electronService.saveProjectToDisk(this.project);
+    this.electronService.removeLocaleFromAllResources(locale);
   }
 
   createProject(path: string, project: Project, resources: Resource[]): void {
-    this.electronService.saveProjectToDisk(project);
-    //create folder AppData
-    this.electronService.createFolder(path + '\\AppData');
-    this.electronService.saveResourcesToDisk(resources);
+    this.electronService.createProject(path, project, resources);
   }
 
   getProject(): Project {
-    this.project = this.electronService.getProjectFromDisk();
-    return this.project;
+    return this.electronService.getProjectFromDisk();
   }
 
   updateProject(project: Project): void {
-    this.project = project;
     this.electronService.saveProjectToDisk(project);
   }
 

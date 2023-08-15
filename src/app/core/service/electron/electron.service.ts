@@ -10,11 +10,17 @@ import { Resource } from '../../model/resource';
 import { Project } from '../../model/project';
 import { Observable, Subject, of } from 'rxjs';
 import { Constants } from '@core/service/electron/constants';
+import { Locale } from '@core/model/locale';
+import { Translation } from '@core/model/translation';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ElectronService {
+
+  project: Project = {} as Project;
+
+  resources: Resource[] = [];
 
   ipcRenderer!: typeof ipcRenderer;
   webFrame!: typeof webFrame;
@@ -98,6 +104,7 @@ export class ElectronService {
 
   saveProjectToDisk = (data: Project) => {
     if (!this.basePath) return;
+    this.project = data;
     if (this.isElectron) {
       this.fs.writeFileSync(`${this.basePath}\\${Constants.PROJECT_FILE_NAME}`,
         JSON.stringify(data, null, 4),
@@ -120,26 +127,67 @@ export class ElectronService {
 
   }
 
-  getProjectFromDisk = () => {
-    if (!this.basePath) return {};
+  removeLocaleFromAllResources(locale: Locale): void {
+    if (locale.id == this.project.baseLocale) {
+      throw new Error('No puede eliminar la cultura base');
+    }
+    let index = this.project.locales.findIndex((l: Locale) => l.id == locale.id);
+    this.project.locales.splice(index, 1);
+    let resources = this.getResourcesFromDisk();
+    this.saveProjectToDisk(this.project);
+    resources.forEach((resource: Resource) => {
+      let index = resource.translations.findIndex((t: Translation) => t.locale == locale.id);
+      resource.translations.splice(index, 1);
+    });
+
+    this.saveResourcesToDisk(resources);
+  }
+
+  addLocaleToAllResources(locale: Locale): void {
+
+    let resources = this.getResourcesFromDisk();
+
+    resources.forEach((resource: Resource) => {
+      let baseTranslation = resource.translations
+        .find((t: Translation) =>
+          t.locale == this.project.baseLocale);
+      resource.translations.push({
+        locale: locale.id,
+        value: baseTranslation?.value || ''
+      });
+    });
+    this.project.locales.push(locale);
+    this.saveResourcesToDisk(resources);
+    this.saveProjectToDisk(this.project);
+  }
+
+  createProject(path: string, project: Project, resources: Resource[]): void {
+    this.saveProjectToDisk(project);
+    //create folder AppData
+    this.createFolder(path + '\\AppData');
+    this.saveResourcesToDisk(resources);
+  }
+
+  getProjectFromDisk = (): Project => {
+    if (!this.basePath) return {} as Project;
     if (this.isElectron) {
       let data = this.fs.readFileSync(`${this.basePath}\\${Constants.PROJECT_FILE_NAME}`, 'utf8');
-      return JSON.parse(data);
+      this.project = JSON.parse(data);
+      return this.project;
     }
-    return {};
+    return {} as Project;
   }
 
   showOpenDialog = (): Observable<string> => {
     if (this.isElectron) {
-      const promise = this.ipcRenderer.invoke('showOpenDialog', {
+      this.ipcRenderer.invoke('showOpenDialog', {
         title: 'Select a file',
         buttonLabel: 'Abrir',
         filters: [
           { name: 'Archivos', extensions: ['json'] },
         ],
         properties: ['openFile']
-      });
-      promise
+      })
         .then((result: any) => {
           console.log(result);
           if (result.canceled) {
@@ -161,12 +209,11 @@ export class ElectronService {
 
   showOpenDialogDirectory = (): Observable<string> => {
     if (this.isElectron) {
-      const promise = this.ipcRenderer.invoke('showOpenDialog', {
+      this.ipcRenderer.invoke('showOpenDialog', {
         title: 'Selccione una carpeta',
         buttonLabel: 'Seleccionar carpeta',
         properties: ['openDirectory']
-      });
-      promise
+      })
         .then((result: any) => {
           console.log(result);
           if (result.canceled) {
