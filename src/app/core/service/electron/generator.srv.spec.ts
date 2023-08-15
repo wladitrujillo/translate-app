@@ -1,18 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UploaderService } from './uploader.service';
+import { GeneratorService } from './generator.srv';
 
-describe('UploaderService', () => {
-  let service: UploaderService;
+describe('GeneratorService', () => {
+  let service: GeneratorService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(UploaderService);
+    service = TestBed.inject(GeneratorService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-
-
 });

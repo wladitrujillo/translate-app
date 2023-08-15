@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Locale } from '@core/model/locale';
 import { RowFileModel } from '@core/model/row-file-model';
-import { UploaderService } from '@core/service/electron/uploader.service';
+import { UploaderService } from '@core/service/electron/uploader.srv';
 import { DialogProcessFileComponent } from '../dialog-process-file/dialog-process-file.component';
 import { ProjectService } from '@core/service/translator/project.service';
 import { NotificationService } from '@shared/service/notification.service';

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogNewComponent } from '../dialog-new/dialog-new.component';
-import { ElectronService } from '@core/service/electron/electron.service';
+import { ElectronService } from '@core/service/electron/electron.srv';
 import { Router } from '@angular/router';
 
 @Component({

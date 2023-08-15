@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Project } from '@core/model/project';
-import { ElectronService } from '../electron/electron.service';
+import { ElectronService } from '../electron/electron.srv';
 import { Resource } from '@core/model/resource';
 import { Locale } from '@core/model/locale';
 

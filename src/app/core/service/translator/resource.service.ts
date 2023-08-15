@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resource } from '@core/model/resource';
-import { ElectronService } from '../electron/electron.service';
+import { ElectronService } from '../electron/electron.srv';
 import { Translation } from '@core/model/translation';
 
 @Injectable({

@@ -8,7 +8,7 @@ import * as path from 'path';
 import { Locale } from '@core/model/locale';
 import { Resource } from '@core/model/resource';
 import { RowFileModel } from '@core/model/row-file-model';
-import { ElectronService } from './electron.service';
+import { ElectronService } from './electron.srv';
 import { Project } from '@core/model/project';
 
 @Injectable({

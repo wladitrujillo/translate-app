@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Project } from '@core/model/project';
-import { GeneratorService } from '@core/service/electron/generator.service';
+import { GeneratorService } from '@core/service/electron/generator.srv';
 import { ProjectService } from '@core/service/translator/project.service';
 import { NotificationService } from '@shared/service/notification.service';
 import { Locale } from 'src/app/core/model/locale';

@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Locale } from '@core/model/locale';
 import { Project } from '@core/model/project';
-import { ElectronService } from '@core/service/electron/electron.service';
+import { ElectronService } from '@core/service/electron/electron.srv';
 import { ProjectService } from '@core/service/translator/project.service';
 
 @Component({
