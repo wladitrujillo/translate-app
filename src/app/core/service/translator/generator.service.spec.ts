@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GeneratorSqlSrv } from './generator.sql.srv';
+import { GeneratorService } from './generator.service';
 
-describe('GeneratorSqlSrv', () => {
-  let service: GeneratorSqlSrv;
+describe('GeneratorService', () => {
+  let service: GeneratorService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(GeneratorSqlSrv);
+    service = TestBed.inject(GeneratorService);
   });
 
   it('should be created', () => {

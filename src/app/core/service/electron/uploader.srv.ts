@@ -14,7 +14,7 @@ import { Project } from '@core/model/project';
 @Injectable({
   providedIn: 'root'
 })
-export class UploaderService {
+export class UploaderSrv {
   ipcRenderer!: typeof ipcRenderer;
   webFrame!: typeof webFrame;
   childProcess!: typeof childProcess;
