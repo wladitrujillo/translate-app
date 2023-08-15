@@ -58,7 +58,89 @@ export class GeneratorSqlSrv {
     }
   }
 
-  private toErrorsMySql(resource: any, locale: string, baseLocale: string): string {
+  private toErrorMySql(resource: any, locale: string, baseLocale: string): string {
+
+    let baseTranslation = resource
+      .translations
+      .find((translation: any) => translation.locale == baseLocale);
+
+    let translation = resource
+      .translations
+      .find((translation: any) => translation.locale == locale);
+
+
+    if (!translation || !baseTranslation) {
+      return '';
+    }
+
+    let result = '';
+
+    if (baseTranslation.locale == translation.locale || baseTranslation.value != translation.value) {
+      result =
+        `select @pc_id := pc_id 
+    from cobis.ad_pseudo_catalogo
+    where pc_tipo = 'E' 
+    and pc_identificador = 'c-cobis-cl-errores'
+    and pc_codigo_int = ${resource.id};`;
+
+      result +=
+        `if exists (select 1 from cobis.ad_recurso 
+        where re_pc_id = @pc_id and re_cultura = '${translation.locale}') 
+        then
+          update cobis.ad_recurso set re_valor = '${translation.value}'
+          where re_pc_id = @pc_id
+          and re_cultura = '${translation.locale}';
+        else
+          insert into cobis.ad_recurso (re_pc_id, re_cultura, re_valor)
+          values (@pc_id, '${translation.locale}', '${translation.value}');
+        end if;`;
+    }
+
+    return result;
+  }
+
+  private toCatalogMySql(resource: any, locale: string, baseLocale: string): string {
+
+    let baseTranslation = resource
+      .translations
+      .find((translation: any) => translation.locale == baseLocale);
+
+    let translation = resource
+      .translations
+      .find((translation: any) => translation.locale == locale);
+
+
+    if (!translation || !baseTranslation) {
+      return '';
+    }
+
+    let result = '';
+
+    if (baseTranslation.locale == translation.locale || baseTranslation.value != translation.value) {
+      result =
+        `select @pc_id := pc_id 
+    from cobis.ad_pseudo_catalogo
+    where pc_tipo = 'C'
+    and pc_identificador = ${resource.id.split('@')[0]} 
+    and pc_codigo = ${resource.id.split('@')[1]};`;
+
+      result +=
+        `if exists (select 1 from cobis.ad_recurso 
+        where re_pc_id = @pc_id and re_cultura = '${translation.locale}') 
+        then
+          update cobis.ad_recurso set re_valor = '${translation.value}'
+          where re_pc_id = @pc_id
+          and re_cultura = '${translation.locale}';
+        else
+          insert into cobis.ad_recurso (re_pc_id, re_cultura, re_valor)
+          values (@pc_id, '${translation.locale}', '${translation.value}');
+        end if;`;
+    }
+
+    return result;
+  }
+
+  private toTransactionMySql(resource: any, locale: string, baseLocale: string): string {
 
     let baseTranslation = resource
       .translations
@@ -97,20 +179,39 @@ export class GeneratorSqlSrv {
     return result;
   }
 
-
-  private getScriptErrorsMySqlForLocales(procedureName: string, locale: string, baseLocale: string): string {
-
+  private getSpHeader(procedureName: string): string {
     let header = 'use cobis;\n';
     let cleanProcedureName = procedureName.replace(/-/g, '_');
     header += `DROP PROCEDURE IF EXISTS ${cleanProcedureName};\n`;
     header += 'DELIMITER //\n';
     header += `CREATE PROCEDURE ${cleanProcedureName}()\n`;
     header += 'BEGIN\n';
+    return header;
+  }
+
+  private getSpFooter(procedureName: string): string {
+    let cleanProcedureName = procedureName.replace(/-/g, '_');
+    let footer = `\nEND//\n`;
+    footer += `DELIMITER ;\n`;
+    footer += `CALL ${cleanProcedureName}();\n`;
+    footer += `DROP PROCEDURE IF EXISTS ${cleanProcedureName};\n`;
+    return footer;
+  }
+
+
+  private getScriptMySqlForLocales(
+    procedureName: string,
+    locale: string,
+    baseLocale: string,
+    generateBody: (r: any, l: any, b: any) => string): string {
+
+    let header = this.getSpHeader(procedureName);
+    let footer = this.getSpFooter(procedureName);
 
     const resources = JSON.parse(this.fs.readFileSync(`${this.appDataPath}\\${Constants.RESOURCES_FILE_NAME}`, 'utf8'));
     let body = '';
     resources.forEach((resource: any) => {
-      body += this.toErrorsMySql(resource, locale, baseLocale);
+      body += generateBody(resource, locale, baseLocale);
     });
 
     body = format(body,
@@ -121,10 +222,7 @@ export class GeneratorSqlSrv {
         linesBetweenQueries: 1,
       });
 
-    let footer = `\nEND//\n`;
-    footer += `DELIMITER ;\n`;
-    footer += `CALL ${cleanProcedureName}();\n`;
-    footer += `DROP PROCEDURE IF EXISTS ${cleanProcedureName};\n`;
+
 
     return header + body + footer;
   }
@@ -133,11 +231,10 @@ export class GeneratorSqlSrv {
 
     for (let locale of locales) {
 
-      let sql = this.getScriptErrorsMySqlForLocales(`COBIS_errors_mysql_${locale.id}`,
-        locale.id, baseLocale.id);
-
       if (this.isElectron) {
         this.createBuildFolder();
+        let sql = this.getScriptMySqlForLocales(`COBIS_errors_mysql_${locale.id}`,
+          locale.id, baseLocale.id, this.toErrorMySql);
         const filePath = `${this.appBuildPath}\\COBIS_errors_mysql_${locale.id}.sql`;
         if (this.fs.existsSync(filePath)) {
           this.fs.unlinkSync(filePath);
@@ -152,10 +249,11 @@ export class GeneratorSqlSrv {
 
   exportToCatalogMySql(locales: Locale[], baseLocale: Locale): void {
     for (let locale of locales) {
-      let sql = '';
       if (this.isElectron) {
+        let sql = this.getScriptMySqlForLocales(`COBIS_catalog_mysql_${locale.id}`,
+          locale.id, baseLocale.id, this.toCatalogMySql);
         this.createBuildFolder();
-        const pathToResult = `${this.appBuildPath}\\COBIS_sqlserver_${locale.id}.sql`;
+        const pathToResult = `${this.appBuildPath}\\COBIS_catalog_mysql_${locale.id}.sql`;
         this.fs.appendFileSync(pathToResult, sql);
       }
     }
@@ -163,11 +261,12 @@ export class GeneratorSqlSrv {
 
   exportToTransactionMySql(locales: Locale[], baseLocale: Locale): void {
     for (let locale of locales) {
-      let sql = '';
 
       if (this.isElectron) {
+        let sql = this.getScriptMySqlForLocales(`COBIS_trn_mysql_${locale.id}`,
+          locale.id, baseLocale.id, this.toTransactionMySql);
         this.createBuildFolder();
-        const pathToResult = `${this.appBuildPath}\\COBIS_sqlserver_${locale.id}.sql`;
+        const pathToResult = `${this.appBuildPath}\\COBIS_trn_mysql_${locale.id}.sql`;
         this.fs.appendFileSync(pathToResult, sql);
       }
     }
