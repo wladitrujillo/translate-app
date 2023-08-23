@@ -92,7 +92,12 @@ export class EditorComponent implements OnInit, AfterViewInit {
       .open(DialogAddResourceComponent, dialogConfig);
 
     dialogRef.afterClosed()
-      .subscribe(result => { console.log(result) });
+      .subscribe(result => {
+        console.log(result)
+        if (result.success) {
+          this.resources.push(result.resource);
+        }
+      });
   }
 
   onDeleteResource(resource: Resource): void {

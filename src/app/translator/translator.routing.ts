@@ -5,14 +5,17 @@ import { ContainerComponent } from './components/container/container.component';
 
 const routes: Routes = [
   {
-    path: 'container',
+    path: '',
     component: ContainerComponent
   }
 ];
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, RouterModule.forChild(routes)],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes)
+  ],
   exports: [RouterModule]
 })
 export class TranslatorRoutingModule { }

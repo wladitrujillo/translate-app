@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resource } from '@core/model/resource';
-import { ElectronService } from '../electron/electron.service';
+import { ElectronService } from '../electron/electron.srv';
 import { Translation } from '@core/model/translation';
 
 @Injectable({
@@ -8,64 +8,36 @@ import { Translation } from '@core/model/translation';
 })
 export class ResourceService {
 
-  resources: Resource[] = [];
 
   constructor(private electronService: ElectronService) {
   }
 
 
   addResource(resource: Resource): void {
-    let found = this.resources.some((r: Resource) => r.id == resource.id);
-    if (found) {
-      throw new Error(`El recurso con identificador ${resource.id} ya existe`);
-    }
-
-    this.resources.push(resource); // add resource to the end of the array
-    this.electronService.saveResourcesToDisk(this.resources);
+    this.electronService.addResource(resource);
   }
 
   getResources(): Resource[] {
-    this.resources = this.electronService.getResourcesFromDisk();
-    return this.resources;
+    return this.electronService.getResourcesFromDisk();
   }
 
   getResourcesFilterByText(text: string): Resource[] {
-    if (!text) {
-      return this.resources;
-    }
-    return this.resources
-      .filter((resource) => {
-        return resource.id?.includes(text) ||
-          resource.translations?.some((translation) => {
-            return translation.value?.includes(text);
-          });
-      });
+    return this.electronService.getResourcesFilterByText(text);
   }
 
 
   updateResource(resource: Resource): void {
-    let index = this.resources.findIndex((r: Resource) => r.id == resource.id);
-    if (index < 0) return;
-    this.resources[index] = resource; // replace resource at index
-    this.electronService.saveResourcesToDisk(this.resources);
+    this.electronService.updateResource(resource);
   }
 
   deleteResource(resourceId: string): void {
-    let index = this.resources.findIndex((r: Resource) => r.id == resourceId);
-    if (index < 0) return;
-    this.resources.splice(index, 1); // remove 1 element from index
-    this.electronService.saveResourcesToDisk(this.resources);
+    this.electronService.deleteResource(resourceId);
   }
 
   updateTranslation(
     resourceId: string,
     translation: Translation): void {
-    let resource = this.resources.find((r: Resource) => r.id == resourceId);
-    if (!resource) return;
-    let index = resource.translations.findIndex((t: any) => t.locale == translation.locale);
-    if (index < 0) return;
-    resource.translations[index] = translation;
-    this.electronService.saveResourcesToDisk(this.resources);
+    this.electronService.updateTranslation(resourceId, translation);
   }
 
 }

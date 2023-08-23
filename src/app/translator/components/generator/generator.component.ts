@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Project } from '@core/model/project';
-import { GeneratorService } from '@core/service/electron/generator.service';
+import { GeneratorService } from '@core/service/translator/generator.service';
 import { ProjectService } from '@core/service/translator/project.service';
 import { NotificationService } from '@shared/service/notification.service';
 import { Locale } from 'src/app/core/model/locale';
@@ -15,7 +15,7 @@ import { Locale } from 'src/app/core/model/locale';
 export class GeneratorComponent implements OnInit {
 
   panelOpenState = false;
-  fileFormat: FormControl = new FormControl('mysql');
+  fileFormat: FormControl = new FormControl('');
   selectedLocales: FormControl = new FormControl([]);
 
   locales: Locale[] = [];
@@ -33,9 +33,10 @@ export class GeneratorComponent implements OnInit {
     this.project = this.projectService.getProject();
     this.locales = this.project.locales;
     this.formats = [
-      { value: 'mysql', description: 'MySQL (.sql)' },
-      { value: 'sqlserver', description: 'SQL Server (.sql)' },
-      { value: 'json', description: 'Json (.json)' },
+      { value: 'mysql-errors', description: 'MySQL (.sql) errores' },
+      { value: 'mysql-catalogs', description: 'MySQL (.sql) catalogos' },
+      { value: 'mysql-trn', description: 'MySQL (.sql) transacciones' },
+      { value: 'menu', description: 'Menu (.js)' },
     ]
   }
 
@@ -49,16 +50,30 @@ export class GeneratorComponent implements OnInit {
 
     let fileFormat: string = this.fileFormat.value;
 
-    if (fileFormat == 'mysql') {
-      this.generator.exportToMySql(locales, { id: this.project?.baseLocale || '', name: '' });
-      this.notification.success('Se ha generado los scripts SQL');
-    } else if (fileFormat == 'sqlserver') {
-      this.notification.success('Se ha generado los scripts SQL');
-      this.generator.exportToSqlServer(locales, { id: this.project?.baseLocale || '', name: '' });
-    } else if (fileFormat == 'json') {
-      this.generator.exportToJson(locales);
-      this.notification.success('Se ha generado los archivos JSON');
+    switch (fileFormat) {
+      case 'mysql-errors':
+        this.generator.toErrorsMySql(locales, { id: this.project?.baseLocale || '', name: '' });
+        this.notification.success('Se ha generado los scripts SQL');
+        break;
+      case 'mysql-catalogs':
+        this.generator.toCatalogMySql(locales, { id: this.project?.baseLocale || '', name: '' });
+        this.notification.success('Se ha generado los scripts SQL');
+        break;
+      case 'mysql-trn':
+        this.generator.toTransactionMySql(locales, { id: this.project?.baseLocale || '', name: '' });
+        this.notification.success('Se ha generado los scripts SQL');
+        break;
+      case 'menu':
+        this.generator.toMenuJS(locales);
+        this.notification.success('Se ha generado los archivos de Menu JS');
+        break;
+      case 'json':
+        this.generator.toJson(locales);
+        this.notification.success('Se ha generado los archivos JSON');
+        break;
+      default:
     }
+
   }
 
   compareLocales(locale1: Locale, locale2: Locale): boolean {

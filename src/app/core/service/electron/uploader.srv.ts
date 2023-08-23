@@ -8,13 +8,13 @@ import * as path from 'path';
 import { Locale } from '@core/model/locale';
 import { Resource } from '@core/model/resource';
 import { RowFileModel } from '@core/model/row-file-model';
-import { ElectronService } from './electron.service';
+import { ElectronService } from './electron.srv';
 import { Project } from '@core/model/project';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UploaderService {
+export class UploaderSrv {
   ipcRenderer!: typeof ipcRenderer;
   webFrame!: typeof webFrame;
   childProcess!: typeof childProcess;
@@ -119,11 +119,11 @@ export class UploaderService {
   }
 
   get appDataPath(): string {
-    return localStorage.getItem('path') + '\\AppData';
+    return this.path.join(this.basePath, 'AppData');
   }
 
-  get basePath() {
-    return localStorage.getItem('path');
+  get basePath(): string {
+    return localStorage.getItem('path') as string;
   }
 
 }
