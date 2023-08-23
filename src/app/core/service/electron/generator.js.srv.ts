@@ -59,7 +59,7 @@ export class GeneratorJsSrv {
 
   exportToJson(locales: Locale[]): void {
 
-    const resources = JSON.parse(this.fs.readFileSync(`${this.appDataPath}\\${Constants.RESOURCES_FILE_NAME}`, 'utf8'));
+    const resources = JSON.parse(this.fs.readFileSync(this.resourcesPath, 'utf8'));
 
     for (let locale of locales) {
       let json: any = {};
@@ -79,7 +79,7 @@ export class GeneratorJsSrv {
 
   exportToMenuJS(locales: Locale[]): void {
 
-    const resources = JSON.parse(this.fs.readFileSync(`${this.appDataPath}\\${Constants.RESOURCES_FILE_NAME}`, 'utf8'));
+    const resources = JSON.parse(this.fs.readFileSync(this.resourcesPath, 'utf8'));
 
     for (let locale of locales) {
       let menu: any = {
@@ -92,19 +92,25 @@ export class GeneratorJsSrv {
       }
       if (this.isElectron) {
         this.createBuildFolder();
-        const pathToResult = `${this.appBuildPath}\\${locale.id}.js`;
+        const pathToResult = this.path.join(this.appBuildPath, `${locale.id}.js`);
         this.fs.appendFileSync(pathToResult, JSON.stringify(menu, null, 4));
       }
     }
 
   }
+  get resourcesPath(): string {
+    return this.path.join(this.appDataPath, Constants.RESOURCES_FILE_NAME);
+  }
+
 
   get appBuildPath(): string {
-    return localStorage.getItem('path') + '\\build';
+    let basePath = localStorage.getItem('path') as string;
+    return this.path.join(basePath, 'build');
   }
 
   get appDataPath(): string {
-    return localStorage.getItem('path') + '\\AppData';
+    let basePath = localStorage.getItem('path') as string;
+    return this.path.join(basePath, 'AppData');
   }
 
   private createBuildFolder(): void {

@@ -42,7 +42,7 @@ export class DialogAddResourceComponent implements OnInit {
         });
       });
       this.resourceService.addResource(resource);
-      this.dialogRef.close(true);
+      this.dialogRef.close({ success: true, resource });
     } catch (e) {
       console.error(e);
       this.notification.error(e as string);

@@ -119,11 +119,11 @@ export class UploaderSrv {
   }
 
   get appDataPath(): string {
-    return localStorage.getItem('path') + '\\AppData';
+    return this.path.join(this.basePath, 'AppData');
   }
 
-  get basePath() {
-    return localStorage.getItem('path');
+  get basePath(): string {
+    return localStorage.getItem('path') as string;
   }
 
 }

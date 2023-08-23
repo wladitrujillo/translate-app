@@ -121,7 +121,7 @@ export class GeneratorSqlSrv {
         `select @pc_id := pc_id 
     from cobis.ad_pseudo_catalogo
     where pc_tipo = 'C'
-    and pc_identificador = ${resource.id.split('@')[0]} 
+    and pc_identificador = '${resource.id.split('@')[0]}' 
     and pc_codigo = ${resource.id.split('@')[1]};`;
 
       result +=
@@ -161,7 +161,9 @@ export class GeneratorSqlSrv {
       result =
         `select @pc_id := pc_id 
     from cobis.ad_pseudo_catalogo
-    where pc_codigo_int = ${resource.id};`;
+    where pc_tipo = 'T' 
+    and pc_identificador = 'c-cobis-cl-ttransaccion'
+    and pc_codigo_int = ${resource.id};`;
 
       result +=
         `if exists (select 1 from cobis.ad_recurso 
@@ -208,7 +210,7 @@ export class GeneratorSqlSrv {
     let header = this.getSpHeader(procedureName);
     let footer = this.getSpFooter(procedureName);
 
-    const resources = JSON.parse(this.fs.readFileSync(`${this.appDataPath}\\${Constants.RESOURCES_FILE_NAME}`, 'utf8'));
+    const resources = JSON.parse(this.fs.readFileSync(this.resourcesPath, 'utf8'));
     let body = '';
     resources.forEach((resource: any) => {
       body += generateBody(resource, locale, baseLocale);
@@ -235,7 +237,7 @@ export class GeneratorSqlSrv {
         this.createBuildFolder();
         let sql = this.getScriptMySqlForLocales(`COBIS_errors_mysql_${locale.id}`,
           locale.id, baseLocale.id, this.toErrorMySql);
-        const filePath = `${this.appBuildPath}\\COBIS_errors_mysql_${locale.id}.sql`;
+        const filePath = this.path.join(this.appBuildPath, `COBIS_errors_mysql_${locale.id}.sql`);
         if (this.fs.existsSync(filePath)) {
           this.fs.unlinkSync(filePath);
         }
@@ -253,7 +255,10 @@ export class GeneratorSqlSrv {
         let sql = this.getScriptMySqlForLocales(`COBIS_catalog_mysql_${locale.id}`,
           locale.id, baseLocale.id, this.toCatalogMySql);
         this.createBuildFolder();
-        const pathToResult = `${this.appBuildPath}\\COBIS_catalog_mysql_${locale.id}.sql`;
+        const pathToResult = this.path.join(this.appBuildPath, `COBIS_catalog_mysql_${locale.id}.sql`);
+        if (this.fs.existsSync(pathToResult)) {
+          this.fs.unlinkSync(pathToResult);
+        }
         this.fs.appendFileSync(pathToResult, sql);
       }
     }
@@ -266,18 +271,27 @@ export class GeneratorSqlSrv {
         let sql = this.getScriptMySqlForLocales(`COBIS_trn_mysql_${locale.id}`,
           locale.id, baseLocale.id, this.toTransactionMySql);
         this.createBuildFolder();
-        const pathToResult = `${this.appBuildPath}\\COBIS_trn_mysql_${locale.id}.sql`;
+        const pathToResult = this.path.join(this.appBuildPath, `COBIS_trn_mysql_${locale.id}.sql`);
+        if (this.fs.existsSync(pathToResult)) {
+          this.fs.unlinkSync(pathToResult);
+        }
         this.fs.appendFileSync(pathToResult, sql);
       }
     }
   };
 
+  get resourcesPath(): string {
+    return this.path.join(this.appDataPath, Constants.RESOURCES_FILE_NAME);
+  }
+
   get appBuildPath(): string {
-    return localStorage.getItem('path') + '\\build';
+    let basePath = localStorage.getItem('path') as string;
+    return this.path.join(basePath, 'build');
   }
 
   get appDataPath(): string {
-    return localStorage.getItem('path') + '\\AppData';
+    let basePath = localStorage.getItem('path') as string;
+    return this.path.join(basePath, 'AppData');
   }
 
   private createBuildFolder(): void {

@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { ipcRenderer, webFrame } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
+import * as path from 'path';
 
 import { Resource } from '../../model/resource';
 import { Project } from '../../model/project';
@@ -26,6 +27,7 @@ export class ElectronService {
   webFrame!: typeof webFrame;
   childProcess!: typeof childProcess;
   fs!: typeof fs;
+  path !: typeof path;
 
   subject = new Subject<string>();
 
@@ -37,6 +39,7 @@ export class ElectronService {
       this.ipcRenderer = (window as any).require('electron').ipcRenderer;
       this.webFrame = (window as any).require('electron').webFrame;
       this.fs = (window as any).require('fs');
+      this.path = (window as any).require('path');
 
       this.childProcess = (window as any).require('child_process');
       this.childProcess.exec('node -v', (error, stdout, stderr) => {
@@ -87,7 +90,7 @@ export class ElectronService {
     if (!this.basePath) return;
     this.project = data;
     if (this.isElectron) {
-      this.fs.writeFileSync(`${this.basePath}\\${Constants.PROJECT_FILE_NAME}`,
+      this.fs.writeFileSync(this.path.join(this.basePath, Constants.PROJECT_FILE_NAME),
         JSON.stringify(data, null, 4),
         {
           encoding: "utf8",
@@ -145,14 +148,14 @@ export class ElectronService {
   createProject(path: string, project: Project, resources: Resource[]): void {
     this.saveProjectToDisk(project);
     //create folder AppData
-    this.createFolder(path + '\\AppData');
+    this.createFolder(this.path.join(path, 'AppData'));
     this.saveResourcesToDisk(resources);
   }
 
   getProjectFromDisk = (): Project => {
     if (!this.basePath) return {} as Project;
     if (this.isElectron) {
-      let data = this.fs.readFileSync(`${this.basePath}\\${Constants.PROJECT_FILE_NAME}`, 'utf8');
+      let data = this.fs.readFileSync(this.path.join(this.basePath, Constants.PROJECT_FILE_NAME), 'utf8');
       this.project = JSON.parse(data);
       return this.project;
     }
@@ -178,7 +181,7 @@ export class ElectronService {
             localStorage.removeItem('path');
           } else {
             //TO-DO: Validar que sea un archivo json and that contains the correct structure
-            const path = result.filePaths[0].split('\\').slice(0, -1).join('\\');
+            const path = this.path.dirname(result.filePaths[0]);
             localStorage.setItem('path', path);
             this.subject.next(result.filePaths[0]);
           }
@@ -219,7 +222,7 @@ export class ElectronService {
   // Resources
   saveResourcesToDisk = (data: Resource[]) => {
     if (this.isElectron) {
-      this.fs.writeFileSync(`${this.appDataPath}\\${Constants.RESOURCES_FILE_NAME}`,
+      this.fs.writeFileSync(this.path.join(this.appDataPath, Constants.RESOURCES_FILE_NAME),
         JSON.stringify(data, null, 4),
         {
           encoding: "utf8",
@@ -234,7 +237,7 @@ export class ElectronService {
     if (!this.basePath) return [];
 
     if (this.isElectron) {
-      let data = this.fs.readFileSync(`${this.appDataPath}\\${Constants.RESOURCES_FILE_NAME}`, 'utf8');
+      let data = this.fs.readFileSync(this.path.join(this.appDataPath, Constants.RESOURCES_FILE_NAME), 'utf8');
       return JSON.parse(data);
     }
     return [];
@@ -296,7 +299,7 @@ export class ElectronService {
 
 
   get appDataPath(): string {
-    return this.basePath + '\\AppData';
+    return this.path.join(this.basePath, 'AppData');
   }
 
   get basePath(): string {
