@@ -37,7 +37,6 @@ export class GeneratorComponent implements OnInit {
       { value: 'mysql-catalogs', description: 'MySQL (.sql) catalogos' },
       { value: 'mysql-trn', description: 'MySQL (.sql) transacciones' },
       { value: 'menu', description: 'Menu (.js)' },
-      { value: 'json', description: 'Json (.json)' },
     ]
   }
 

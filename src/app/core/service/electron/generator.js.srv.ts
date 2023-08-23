@@ -88,11 +88,11 @@ export class GeneratorJsSrv {
         }
       };
       for (let resource of resources) {
-        menu.commons.menu[resource.id] = resource.translations.find((translation: any) => translation.locale === locale.id)?.value;
+        menu.COMMONS.MENU[resource.id] = resource.translations.find((translation: any) => translation.locale === locale.id)?.value;
       }
       if (this.isElectron) {
         this.createBuildFolder();
-        const pathToResult = this.path.join(this.appBuildPath, `${locale.id}.js`);
+        const pathToResult = this.path.join(this.appBuildPath, `menu-${locale.id}.js`);
         this.fs.appendFileSync(pathToResult, JSON.stringify(menu, null, 4));
       }
     }

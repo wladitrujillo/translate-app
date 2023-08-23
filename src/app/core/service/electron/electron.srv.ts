@@ -234,13 +234,16 @@ export class ElectronService {
 
   getResourcesFromDisk = () => {
 
-    if (!this.basePath) return [];
+    this.resources = [];
+
+    if (!this.basePath) return this.resources;
 
     if (this.isElectron) {
       let data = this.fs.readFileSync(this.path.join(this.appDataPath, Constants.RESOURCES_FILE_NAME), 'utf8');
-      return JSON.parse(data);
+      this.resources = JSON.parse(data);
+      return this.resources;
     }
-    return [];
+    return this.resources;
   }
   addResource(resource: Resource): void {
     let found = this.resources.some((r: Resource) => r.id == resource.id);
@@ -250,11 +253,6 @@ export class ElectronService {
 
     this.resources.push(resource); // add resource to the end of the array
     this.saveResourcesToDisk(this.resources);
-  }
-
-  getResources(): Resource[] {
-    this.resources = this.getResourcesFromDisk();
-    return this.resources;
   }
 
   getResourcesFilterByText(text: string): Resource[] {
