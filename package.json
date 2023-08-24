@@ -1,5 +1,5 @@
 {
-  "name": "translate-app",
+  "name": "translator-app",
   "description": "App build with electron and angular to manage translations",
   "author": {
     "name": "Nelson Trujillo",

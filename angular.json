@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "translate-app": {
+    "translator-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -86,16 +86,16 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "translate-app:build:production"
+              "browserTarget": "translator-app:build:production"
             },
             "development": {
-              "browserTarget": "translate-app:build:development"
+              "browserTarget": "translator-app:build:development"
             },
             "web": {
-              "browserTarget": "translate-app:build:web"
+              "browserTarget": "translator-app:build:web"
             },
             "web-production": {
-              "browserTarget": "translate-app:build:web-production"
+              "browserTarget": "translator-app:build:web-production"
             }
           },
           "defaultConfiguration": "development"
@@ -103,7 +103,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "translate-app:build"
+            "browserTarget": "translator-app:build"
           }
         },
         "test": {
